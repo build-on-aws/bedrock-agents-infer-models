@@ -121,7 +121,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 
 ### Step 4: Lambda function creation
-- Now we create a Lambda function (Python 3.11) for the bedrock agent's action group using the container image from the previous step. Navigate back to the AWS management console, then in the search bar, type `Lambda` then selct the service.
+- Now we create a Lambda function (Python 3.11) for the bedrock agent's action group using the container image from the previous step. Navigate back to the AWS management console, then in the search bar, type `Lambda` then select the service.
 
 - Select `Create function`. Then select the `Container image` radio button from the top 3 options.
 
