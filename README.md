@@ -252,7 +252,7 @@ Here is an example of what a url response to access an image should look like:
 ```
 
 
-- This prompt helps provide the agent an example on formatting the response of a presigned url when images are generated. Additionally, there is an option to use a [custom parser Lambda function](https://docs.aws.amazon.com/bedrock/latest/userguide/lambda-parser.html) for more granular formatting. 
+- This prompt helps provide the agent an example when formatting the response of a presigned url after an image is generated in the S3 bucket. Additionally, there is an option to use a [custom parser Lambda function](https://docs.aws.amazon.com/bedrock/latest/userguide/lambda-parser.html) for more granular formatting. 
 
 - Scroll to the bottom and select the `Save and exit` button.
 
