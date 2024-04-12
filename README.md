@@ -1,7 +1,7 @@
 # Setup Amazon Bedrock agent to Infer various LLMs.
 
 ## Introduction
-This project is intended to be a baseline for builders to extend their use cases across various LLMs via Amazon Bedrock agents. The intent is to show the art of the possible leveraging all available models on Bedrock for chained responses to fit different use cases. This README is a guide to setting this up, giving you the ability to further explore the power of agents with the latest models on Amazon bedrock. 
+This project is intended to be a baseline for builders to extend their use cases across various LLMs via Amazon Bedrock agents. The intent is to show the art of the possible leveraging all available models on Bedrock for chained responses to fit different use cases. This README is a guide to setting this up, giving you the flexibility to further explore the power of agents with the latest models on Amazon bedrock. 
 
 ## Prerequisites
 - An active AWS Account.
