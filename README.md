@@ -72,7 +72,7 @@ This project is intended to be a baseline for builders to extend there use cases
 
 - Create an S3 bucket, and call it `bedrock-agent-images-{alias}`. The rest of the settings will remain default. ***Make sure to update {alias} with the correct value throughout this project**
 
-- Next, upload the sample image from [here](https://github.com/jossai87/bedrock-agent-call-multiple-models/blob/main/images/generated_pic.png), to this S3 bucket.
+- Next, upload the sample image from [here](https://github.com/build-on-aws/bedrock-agents-infer-models/blob/main/images/the_image.png), to this S3 bucket.
 
 
 ### Step 2: Create an Amazon ECR (Elastic Container Registry)
@@ -91,7 +91,7 @@ This project is intended to be a baseline for builders to extend there use cases
 
 ### Step 3: Download project. Setup & run Docker
 
-- Download the sample project from [here](https://github.com/jossai87/bedrock-agent-call-multiple-models/archive/refs/heads/main.zip). 
+- Download the sample project from [here](https://github.com/build-on-aws/bedrock-agents-infer-models/archive/refs/heads/main.zip). 
 
 -  Once downloaded, **unzip the file**:
 
