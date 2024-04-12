@@ -1,0 +1,43 @@
+FROM scratch
+ADD x86_64/29080084a5bc69d83b9a7092af379c4705455dcfa189b99a0e03543848a3bbcd.tar.xz /
+ADD x86_64/2c4f5fd4f5365007f1808a27468387a0cb0c6acd2ae1374b2d482f7ae53356b2.tar.xz /
+ADD x86_64/32f0ef17450ac33f2c6e357e7f41d5bf208ef097965b85e425f7bac241ecba3f.tar.xz /
+ADD x86_64/8322f567d46193925b9059da311a42864c19330612ca156474063573ce04a9b1.tar.xz /
+ADD x86_64/8cd02b2a421e7e6d8927434ac5b4baf46683ccf2b2c38237b75e1abfe895e063.tar.xz /
+ADD x86_64/feb815887f22ce6ea2814b716320e5a1b255f00f3ed05a1f21f0d8640b117208.tar.xz /
+
+ENV LANG=en_US.UTF-8
+ENV TZ=:/etc/localtime
+ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin
+ENV LD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib
+ENV LAMBDA_TASK_ROOT=/var/task
+ENV LAMBDA_RUNTIME_DIR=/var/runtime
+
+WORKDIR /var/task
+
+COPY lambda_function.py /var/task/
+#COPY test.py /var/task/   
+COPY . ..
+
+RUN /var/lang/bin/python3.11 -m pip install --upgrade pip
+RUN /var/lang/bin/python3 -m pip install botocore --upgrade
+RUN /var/lang/bin/python3 -m pip install boto3 --upgrade
+
+RUN /var/lang/bin/python3 -m pip install langchain
+RUN /var/lang/bin/python3 -m pip install pillow
+
+#RUN /var/lang/bin/python3 -m pip install faiss-cpu
+#RUN /var/lang/bin/python3 -m pip install opensearch-py
+#RUN /var/lang/bin/python3 -m pip install transformers
+#RUN /var/lang/bin/python3 -m pip install lxml
+#RUN /var/lang/bin/python3 -m pip install duckduckgo-search
+#RUN /var/lang/bin/python3 -m pip install html2text
+
+
+
+
+
+ENTRYPOINT ["/lambda-entrypoint.sh"]
+
+# Set the CMD to your handler
+CMD ["lambda_function.lambda_handler"]

@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Model Inference API",
+    "description": "API for calling a model with a prompt and model ID",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/callModel": {
+      "post": {
+        "description": "Call a model with a prompt and model ID",
+        "parameters": [
+          {
+            "name": "modelId",
+            "in": "query",
+            "description": "The ID of the model to call",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prompt",
+            "in": "query",
+            "description": "The prompt to provide to the model",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "modelId": {
+                    "type": "string",
+                    "description": "The ID of the model to call"
+                  },
+                  "prompt": {
+                    "type": "string",
+                    "description": "The prompt to provide to the model"
+                  }
+                },
+                "required": ["modelId", "prompt"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "string",
+                      "description": "The result of calling the model with the provided prompt"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
