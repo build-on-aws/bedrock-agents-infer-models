@@ -150,7 +150,7 @@ You are an research agent that interacts with various models to do tasks and ret
 - Call the action group `call-model`. For the Lambda function, we select `bedrock-agent-model-call`.
 
 - For the API Schema, we will choose `Define with in-line OpenAPI schema editor`. Copy & paste the schema from below into the **In-line OpenAPI schema** editor, then select ***Add***:
-- 
+
 `(This API schema is needed so that the bedrock agent knows the format structure and parameters required for the action group to interact with the Lambda function.)`
 
 ```schema
