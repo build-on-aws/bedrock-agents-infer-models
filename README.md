@@ -259,7 +259,7 @@ Here is an example of what a url response to access an image should look like:
 
 ### Step 6: Test various models
 
-- On the right, you should see an option  to test the agent with a user input field. Below are a few prompts that you can test. However, we encourage you to become creative and test variations of input. 
+- On the right, you should see an option  to test the agent with a user input field. Below are a few prompts that you can test. However, it is encouraged you become creative and test variations of prompts. 
 
 - One thing to note before testing. When you do text-to-image or image-to-text, the project code references the same .png file statically. In an ideal environment, this step can be configured to be more dynamically.
 
