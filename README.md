@@ -19,7 +19,6 @@ This project is intended to be a baseline for builders to extend there use cases
 - Image rating
 - Problem solving
 - Q&A
-- RAG (optional)
 - Other
 
 
@@ -240,7 +239,7 @@ You are an research agent that interacts with various models to do tasks and ret
 
 - In the `Advanced prompts` box under `Pre-processing template`, enable the `Override pre-processing template defaults` option. Also, make sure that `Activate pre-processing template` is disabled. This is so that we will bypass the possibility of deny responses. We are choosing this option for simplicity. Ideally, you would modify these prompts to allow only what is required. 
 
-- In the `Prompt template editor`, go to line 19 or 20 and Copy & paste the following prompt:
+- In the ***Prompt template editor***, go to line 19 or 20 and Copy & paste the following prompt:
 
 ```prompt
 Here is an example of what a url response to access an image should look like:
@@ -303,7 +302,7 @@ Use model ai21.j2-mid-v1. You are a gifted copywriter, with special expertise in
      ```
 
 -  **Update Configuration**:
-   - Open the `invoke_agent.py` file.
+   - Open the ***invoke_agent.py*** file.
 
    - On line 23 & 24, update the `agentId` and `agentAliasId` variables with the appropriate values, then save it.
 
