@@ -83,7 +83,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 ![ecr btn](streamlit_app/images/ecr_create_btn.png)
 
-- Provide a repo name. Lets call it `bedrock-agent-bedrock-agent-model-calls`. Leave the other options as default. Scroll to the bottom, then create the repository. 
+- Provide a repo name. Lets call it `bedrock-agent-model-calls`. Leave the other options as default. Scroll to the bottom, then create the repository. 
 
 ![ecr btcreaten](streamlit_app/images/ecr_create.png)
 
@@ -113,7 +113,7 @@ This project is intended to be a baseline for builders to extend their use cases
    docker tag app1:local {account-number}.dkr.ecr.us-west-2.amazonaws.com/bedrock-agent-model-calls:latest 
    ```
    ```bash 
-   docker push {account-number}.dkr.ecr.us-west-2.amazonaws.com/bedrock-agent-bedrock-agent-model-calls:latest 
+   docker push {account-number}.dkr.ecr.us-west-2.amazonaws.com/bedrock-agent-model-calls:latest 
    ```
 
 
@@ -125,7 +125,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 - Select `Create function`. Then select the `Container image` radio button from the top 3 options.
 
-- We will call this Lambda function `bedrock-agent-model-call`. For `Container image URI`, browse the images, select repo `bedrock-agent-bedrock-agent-model-calls`, then the latest image. 
+- We will call this Lambda function `bedrock-agent-model-call`. For `Container image URI`, browse the images, select repo `bedrock-agent-model-calls`, then the latest image. 
 
 - Leave the other options as default, then select the button ***Create function***.
 
