@@ -93,7 +93,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 - Download the sample project from [here](https://github.com/build-on-aws/bedrock-agents-infer-models/archive/refs/heads/main.zip). 
 
--  Once downloaded, **unzip the file**:
+- Once downloaded, ***unzip the file***.
 
 - Open up the project in your IDE of choice. For this project, I will be using [Visual Studio code](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git). Please review the code briefly. 
 
