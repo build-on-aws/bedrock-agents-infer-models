@@ -137,7 +137,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 - To help with inference, we will increase the CPU/memory on the Lambda function. We will also increase the timeout to allow the function enough time to complete the invocation. Select ***General configuration*** on the left, then ***Edit*** on the right.
 
-- Change ***Memory*** to **2048 MB** and timeout to **1 minute**. Scroll down, and select ***Save***
+- Change ***Memory*** to **2048 MB** and timeout to **1 minute**. Scroll down, and select ***Save***.
 
 - Now we need to provide permissions to the Lambda function to read & write to S3 bucket `bedrock-agent-images-{alias}`. This will allow the Lambda function to save & read images from the bucket. While on the Lambda console, select ***Permissions** on the left, then select the role name hyperlink.
   
