@@ -135,6 +135,15 @@ This project is intended to be a baseline for builders to extend their use cases
 
 - Enter `arn:aws:bedrock:us-west-2:{aws-account-id}:agent/* `. ***Please note, AWS recommends least privilage so only the allowed agent can invoke this Lambda function***. A `*` at the end of the ARN grants any agent in the account access to invoke this Lambda. Ideally, we would not use this in a production environment. Lastly, for the Action, select `lambda:InvokeAction`, then ***Save***.
 
+- To help with inference, we will increase the CPU/memory on the Lambda function. We will also increase the timeout to allow the function enough time to complete the invocation. Select ***General configuration*** on the left, then ***Edit*** on the right.
+
+- Change ***Memory*** to **2048 MB** and timeout to **1 minute**. Scroll down, and select ***Save***
+
+- Now we need to provide permissions to the Lambda function to read & write to S3 bucket `bedrock-agent-images-{alias}`. This will allow the Lambda function to save & read images from the bucket. While on the Lambda console, select ***Permissions** on the left, then select the role name hyperlink.
+  
+- In the ***Permissions policies*** section,  select ***Add permissions***, then ***Attach policies***. search for, then add AWS managed policy ***AmazonS3FullAccess*** to the role. Ideally, you would provide least privilage permissions to the role instead of granting S3 full access. We are choosing this option now for simplicity.
+
+
 
 ### Step 5: Setup Bedrock agent and action group 
 - Navigate to the Bedrock console. Go to the toggle on the left, and under **Orchestration** select `Agents`. Provide an agent name, like **multi-model-agent** then create the agent.
