@@ -139,7 +139,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 - Change ***Memory*** to **2048 MB** and timeout to **1 minute**. Scroll down, and select ***Save***.
 
-- Now we need to provide permissions to the Lambda function to read & write to S3 bucket `bedrock-agent-images-{alias}`. This will allow the Lambda function to save & read images from the bucket. While on the Lambda console, select ***Permissions** on the left, then select the role name hyperlink.
+- Now we need to provide permissions to the Lambda function to read & write to S3 bucket `bedrock-agent-images-{alias}`. This will allow the Lambda function to save & read images from the bucket. While on the Lambda console, select ***Permissions*** on the left, then select the role name hyperlink.
   
 - In the ***Permissions policies*** section,  select ***Add permissions***, then ***Attach policies***. search for, then add AWS managed policy ***AmazonS3FullAccess*** to the role. Ideally, you would provide least privilage permissions to the role instead of granting S3 full access. We are choosing this option now for simplicity.
 
