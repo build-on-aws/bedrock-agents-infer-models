@@ -70,7 +70,7 @@ This project is intended to be a baseline for builders to extend their use cases
 ### Step 1: Creating an Amazon S3 bucket
 - This step will be required in order to do image-to-text and text-to-image inference to certain models. Also, make sure that you are in the **us-west-2** region. If another region is required, you will need to update the region in the `invoke_agent.py` file on line 26 of the project code. 
 
-- Create an S3 bucket, and call it `bedrock-agent-images-{alias}`. The rest of the settings will remain default. ***Make sure to update {alias} with the correct value throughout this project**
+- Create an S3 bucket, and call it `bedrock-agent-images-{alias}`. The rest of the settings will remain default. ***Make sure to update {alias} with the correct value throughout this project***
 
 - Next, upload the sample image from [here](https://github.com/build-on-aws/bedrock-agents-infer-models/blob/main/images/the_image.png), to this S3 bucket.
 
