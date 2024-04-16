@@ -455,7 +455,7 @@ def lambda_handler(event, context):
             # Load the image file into a variable
             #fetched_image = Image.open(file_stream)   
 
-        if model_id == 'anthropic.claude-3-haiku-20240307-v1:0' or model_id == 'anthropic.claude-3-sonnet-20240229-v1:0':
+        if model_id == "anthropic.claude-3-opus-20240229-v1:0" or model_id == 'anthropic.claude-3-haiku-20240307-v1:0' or model_id == 'anthropic.claude-3-sonnet-20240229-v1:0':
             # Invoke Claude 3 with text to text
             wrapper = Claude3Wrapper(client)
             if not encoded_image:
