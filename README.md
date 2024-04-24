@@ -338,6 +338,8 @@ Use model ai21.j2-mid-v1. You are a gifted copywriter, with special expertise in
 ### AI21labs: Jurassic models
 - ai21.j2-ultra-v1
 - ai21.j2-mid-v1
+
+### Custom models
   
 
 
