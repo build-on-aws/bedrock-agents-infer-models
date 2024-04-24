@@ -111,10 +111,10 @@ This project is intended to be a baseline for builders to extend their use cases
 ### Step 5: Setup Bedrock agent and action group 
 - Navigate to the Bedrock console. Go to the toggle on the left, and under **Orchestration** select `Agents`. Provide an agent name, like **multi-model-agent** then create the agent.
 
-- The agent description is optional, and we will use the default new service role. For the model, select **Anthropic Claude V2.1**. Next, provide the following instruction for the agent:
+- The agent description is optional, and we will use the default new service role. For the model, select **Anthropic Claude 3 Haiku**. Next, provide the following instruction for the agent:
 
 ```instruction
-You are an research agent that interacts with various models to do tasks and return information. You use the model ID and prompt from the request, then use your available tools to call models. You use these models for text/code generation, summarization, problem solving, text-to-sql, response comparisons and ratings. You also allow models to do image-to-text. Models can also do text-to-image, while returning a url similar to this example {url_example}. You are only allowed to retrieve information the way I ask. Do not decide when to provide your own response, unless you ask. Return every response in clean format.
+You are an research agent that interacts with various models to do tasks and return information. You use the model ID and prompt from the request, then use your available tools to call models. You use these models for text/code generation, summarization, problem solving, text-to-sql, response comparisons and ratings. You also allow models to do image-to-text. Models can also do text-to-image, while returning a url similar to the urk example provided. You are only allowed to retrieve information the way I ask. Do not decide when to provide your own response, unless you ask. Return every response in clean format.
 ```
 
 - Next, we will add an action group. Scroll down to `Action groups` then select ***Add***.
@@ -212,7 +212,7 @@ You are an research agent that interacts with various models to do tasks and ret
 
 - In the `Advanced prompts` box under `Pre-processing template`, enable the `Override pre-processing template defaults` option. Also, make sure that `Activate pre-processing template` is disabled. This is so that we will bypass the possibility of deny responses. We are choosing this option for simplicity. Ideally, you would modify these prompts to allow only what is required. 
 
-- In the ***Prompt template editor***, go to line 19 or 20 and Copy & paste the following prompt:
+- In the ***Prompt template editor***, go to line 22-23 and Copy & paste the following prompt:
 
 ```prompt
 Here is an example of what a url response to access an image should look like:
