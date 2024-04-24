@@ -26,13 +26,12 @@ This project is intended to be a baseline for builders to extend their use cases
 
 ## Models this project currently supports:
 
-### Anthropic: Claude
-### Mistral: models
-### Amazon: Titan Models
-### Meta: Llama models
-### Cohere: Command Models
-### Stability AI: SDXL Models
-### AI21labs: Jurassic models
+- Anthropic: Claude
+- Amazon: Titan Models### Meta: Llama models
+- Cohere: Command Models
+- Stability AI: SDXL Models
+- AI21labs: Jurassic models
+
 
 
 ## Diagram
