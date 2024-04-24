@@ -340,6 +340,7 @@ Use model ai21.j2-mid-v1. You are a gifted copywriter, with special expertise in
 - ai21.j2-mid-v1
 
 ### Custom models
+- {custom model ID}
   
 
 
