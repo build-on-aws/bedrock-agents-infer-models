@@ -27,38 +27,12 @@ This project is intended to be a baseline for builders to extend their use cases
 ## Models this project currently supports:
 
 ### Anthropic: Claude
-- anthropic.claude-3-***opus***-20240229-v1:0
-- anthropic.claude-3-***haiku***-20240307-v1:0
-- anthropic.claude-3-***sonnet***-20240229-v1:0
-- anthropic.claude-***v2:1***
-- anthropic.claude-***v2***
-- anthropic.claude-***instant-v1***
-
 ### Mistral: models
-- mistral.mistral-***large-2402-v1:0***
-- mistral.mistral-***7b-instruct-v0:2***
-- mistral.mixtral-***8x7b-instruct-v0:1***
-
 ### Amazon: Titan Models
-- amazon.titan-***text-lite-v1***
-- amazon.titan-***text-express-v1***
-- amazon.titan-***image-generator-v1*** (in preview)
-
 ### Meta: Llama models
-- meta.llama2-***13b-chat***-v1
-- meta.llama2-***70b-chat***-v1
-
 ### Cohere: Command Models
-- cohere.command-***text-v14***
-- cohere.command-***light-text-v14***
-
 ### Stability AI: SDXL Models
-- stability.stable-diffusion-***xl-v0***
-- stability.stable-diffusion-***xl-v1***
-
 ### AI21labs: Jurassic models
-- ai21.j2-***ultra-v1***
-- ai21.j2-***mid-v1***
 
 
 ## Diagram
