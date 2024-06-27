@@ -1,0 +1,126 @@
+STEPS TO SETUP LAMBDA FUNCTION FOR ACTION GROUP:
+
+1. Update credentials via aws configure
+
+2. Install Serverless Framework:
+npm install -g serverless (REFER BELOW IF AN ERROR OCCURS HERE)
+
+3. Create a new service/project with Python template:
+serverless create --template aws-python3 --path infer-models
+cd infer-models
+
+4. Then install the serverless-python-requirements plugin:
+npm install serverless-python-requirements --save-dev
+
+5. Deploy the Lambda function:
+npx sls deploy    
+
+
+6. View logs of a deployed function:
+serverless logs --function inferModel
+
+
+EXAMPLE PROMPT:
+use model meta.llama3-8b-instruct-v1:0 and Do sentiment analysis with nuances in reasoning of the following: Recently, I purchased a new smartphone from a well-known electronics brand, and I'm thoroughly disappointed. The phone frequently freezes, the battery life is terrible, and the customer service was unhelpful when I reached out for support. I expected much better quality and service based on their reputation.
+
+
+
+
+
+------------------------
+
+IF YOU GET A NODE IUNSUPPORTED ENGINE ERROR when running "npm install -g serverless", FOLLOW THE BELOW INSTRUCTIONS"
+
+The error indicates that your current Node.js version is not supported by the version of Serverless Framework you are trying to install. Additionally, there seems to be a filesystem issue during the installation.
+
+### Steps to Resolve:
+
+1. **Upgrade Node.js**:
+   Upgrade Node.js to a version that meets the requirement of `>=18.0.0`.
+
+2. **Clear NPM Cache and Reinstall Serverless**:
+   Clear the npm cache and then reinstall the Serverless Framework.
+
+3. **Remove Conflicting Directories**:
+   Manually remove any existing conflicting directories before reinstalling.
+
+### Step-by-Step Instructions:
+
+#### 1. Upgrade Node.js
+First, upgrade Node.js to version 18.x or later. You can use `nvm` (Node Version Manager) to manage Node.js versions:
+
+```bash
+# Install nvm if not already installed
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.nvm/nvm.sh
+
+# Install Node.js version 18.x
+nvm install 18
+nvm use 18
+
+# Verify the Node.js version
+node -v
+```
+
+#### 2. Clear NPM Cache and Reinstall Serverless
+
+Clear the npm cache to ensure there are no residual files causing issues:
+
+```bash
+npm cache clean -f
+```
+
+Then, attempt to reinstall the Serverless Framework globally:
+
+```bash
+npm install -g serverless
+```
+
+#### 3. Remove Conflicting Directories Manually
+
+If the installation fails again with a directory not empty error, you may need to manually remove the conflicting directory:
+
+```bash
+# Manually remove the conflicting directory
+rm -rf /Users/jossai/Desktop/TechNotes/Testing/dockertest/vendor/node_modules/lib/node_modules/serverless
+
+# Attempt to reinstall Serverless Framework
+npm install -g serverless
+```
+
+#### 4. Run Locally Installed Version Using `npx`
+
+Alternatively, you can run the locally installed version of Serverless Framework using `npx`:
+
+```bash
+npx serverless deploy
+```
+
+### Summary of Commands
+
+```bash
+# Install nvm if not already installed
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.nvm/nvm.sh
+
+# Install Node.js version 18.x
+nvm install 18
+nvm use 18
+
+# Verify Node.js version
+node -v
+
+# Clear npm cache
+npm cache clean -f
+
+# Manually remove conflicting directory if necessary
+rm -rf /Users/jossai/Desktop/TechNotes/Testing/dockertest/vendor/node_modules/lib/node_modules/serverless
+
+# Install Serverless Framework globally
+npm install -g serverless
+
+# Use npx to run the locally installed version if needed
+npx serverless deploy
+```
+
+These steps should help resolve the issues with installing and using the Serverless Framework.
