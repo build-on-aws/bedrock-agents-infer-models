@@ -1,0 +1,23 @@
+service: infer-models
+
+provider:
+  name: aws
+  runtime: python3.11
+  stage: dev
+  region: us-west-2
+
+functions:
+  inferModel:
+    handler: handler.lambda_handler
+    timeout: 60  # Timeout set to 1 minute
+    events:
+      - http:
+          path: inferModel
+          method: get
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
