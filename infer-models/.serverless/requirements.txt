@@ -1,0 +1,4 @@
+Pillow
+boto3
+botocore
+langchain-community
