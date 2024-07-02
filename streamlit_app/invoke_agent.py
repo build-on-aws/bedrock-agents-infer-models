@@ -20,8 +20,8 @@ from PIL import Image
 #echo $AWS_SESSION_TOKEN
 
 
-agentId = "xxx" #INPUT YOUR AGENT ID HERE
-agentAliasId = "xxx" # Hits draft alias, set to a specific alias id for a deployed version
+agentId = "xx" #INPUT YOUR AGENT ID HERE
+agentAliasId = "xx" # Hits draft alias, set to a specific alias id for a deployed version
 bucket_name = 'bedrock-agent-images'
 os.environ["AWS_REGION"] = "us-west-2"
 
