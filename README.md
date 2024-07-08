@@ -17,7 +17,7 @@ This project is intended to be a baseline for builders to extend their use cases
 
 ![Diagram](images/diagram.png)
 
-The high-level overview of the solution is as follows:
+***The high-level overview of the solution is as follows:***
 
 Agent and Environment Setup: The solution begins by configuring an Amazon Bedrock agent, an AWS Lambda function, and an Amazon S3 bucket. This step establishes the foundation for model interaction and data handling, preparing the system to receive and process prompts from a front-end application.
 Prompt Processing and Model Inference: When a prompt is received from the front-end application, the Bedrock agent evaluates and dispatches the prompt, along with the specified model ID, to the Lambda function using the action group mechanism. This step leverages the action group's API schema for precise parameter handling, facilitating effective model inference based on the input prompt.
@@ -93,7 +93,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 - Navigate to the resources section of the cloud formation template to find the lambda function deployed. 
 - We need to provide the bedrock agent permissions to invoke the lambda function. Open the lambda function and scroll down to select the ***Configuration*** tab. On the left, select *Permissions*. Scroll down to Resource-based policy statements and select Add permissions.
 - Select ***AWS service*** in the middle for your policy statement. Choose ***Other*** for your service, and put ***allow-agent*** for the StatementID. For the Principal, put ***bedrock.amazonaws.com*** .
-- Enter *arn:aws:bedrock:us-west-2:{aws-account-id}:agent/**. Please note, AWS recommends least privilege so only the allowed agent can invoke this Lambda function. A * at the end of the ARN grants any agent in the account access to invoke this Lambda. Ideally, we would not use this in a production environment. Lastly, for the Action, select *lambda:InvokeFunction*, then Save.
+- Enter `arn:aws:bedrock:us-west-2:{aws-account-id}:agent/*`. Please note, AWS recommends least privilege so only the allowed agent can invoke this Lambda function. A * at the end of the ARN grants any agent in the account access to invoke this Lambda. Ideally, we would not use this in a production environment. Lastly, for the Action, select *lambda:InvokeFunction*, then Save.
 ![Diagram](images/3c.png) 
 
 - To help with inference, we will increase the CPU/memory on the Lambda function. We will also increase the timeout to allow the function enough time to complete the invocation. Select ***General configuration*** on the left, then ***Edit*** on the right.
@@ -348,12 +348,12 @@ Use model ai21.j2-mid-v1. You are a gifted copywriter, with special expertise in
 ### Custom models
 - {custom model ID}
 
-***Remember*** that you can use any available model from Amazon Bedrock, and are not limited to the list above. If a model ID is not listed, please refer to the latest available models (IDs) on Amazon Bedrock [here](https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html).
+***Remember*** that you can use any available model from Amazon Bedrock, and are not limited to the list above. If a model ID is not listed, please refer to the latest available models (IDs) on the Amazon Bedrock documentation page [here](https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html).
 
 
 ### Conclusion 
   
-Moving forward, you can leverage the provided this project to fine-tune and benchmark this solution against your own datasets and use cases. Explore different model combinations, push the boundaries of what's possible, and drive innovation in the ever-evolving landscape of generative AI.
+You can leverage the provided project to fine-tune and benchmark this solution against your own datasets and use cases. Explore different model combinations, push the boundaries of what's possible, and drive innovation in the ever-evolving landscape of generative AI.
 
 ## Security
 
