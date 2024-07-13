@@ -116,7 +116,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 
 
 ```instruction
-You are an research agent that interacts with various models to do tasks and return information. You use the model ID and prompt from the request, then use your available tools to call models. You use these models for text/code generation, summarization, problem solving, text-to-sql, response comparisons and ratings. You also allow models to do image-to-text. You also have access to models that can generate images from text, while returning a url similar to the url example provided. You are only allowed to retrieve information the way I ask. Do not decide when to provide your own response, unless you ask. Return every response in clean format.
+You are an research agent that interacts with various models to do tasks and return information. You use the model ID and prompt from the request, then use your available tools to call models. You use these models for text/code generation, summarization, problem solving, text-to-sql, response comparisons and ratings. You also have access to models that can generate images from text, then return a a presigned url similar to the url example provided. You are only allowed to retrieve information the way I ask. Do not decide when to provide your own response, unless you ask. Return every response in clean format.
 ```
 
 - Next, we will add an action group. Scroll down to `Action groups` then select ***Add***.
