@@ -10,7 +10,11 @@ Parameters:
       - t3.small
       - t3.medium
       - t3.large
-
+  RegionIpsAllowed:
+    Description: subnet for allowed IPs for a particular region
+    Type: String
+    Default: 18.206.107.24/29  #for us-east-1 region
+    # 18.237.140.160/29 is for us-west-2
 Resources:
   # Create a VPC
   VPC:
@@ -86,7 +90,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 18.237.140.160/29
+          CidrIp: !Ref RegionIpsAllowed 
 
   # Create an IAM Role for the EC2 instance to use SSM and Amazon Bedrock
   EC2Role:
