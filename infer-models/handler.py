@@ -18,6 +18,7 @@ region = boto3.Session().region_name
 # Construct the S3 bucket name
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
+bucket_name = os.environ.get('S3_IMAGE_BUCKET')  # Replace with the name of your bucket
 object_name = 'the_image.png' 
 
 logger = logging.getLogger(__name__)

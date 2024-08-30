@@ -1,0 +1,318 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: First stack to create ECR repository, build Docker image, and push to ECR.
+
+Resources:
+  # ECR Repository
+  ECRRepository:
+    Type: 'AWS::ECR::Repository'
+    Properties:
+      RepositoryName: !Sub 'lambda-function-repo-${AWS::AccountId}-${AWS::Region}'
+
+  # S3 Bucket for storing artifacts
+  ArtifactBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub 'codepipeline-artifacts-${AWS::AccountId}-${AWS::Region}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # S3 Bucket Policy
+  ArtifactBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref ArtifactBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Resource: !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action:
+              - 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action:
+              - 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
+
+  # Lambda function to download the project zip file from GitHub
+  DownloadProjectFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: !Sub 'DownloadProjectFunction-${AWS::AccountId}-${AWS::Region}'
+      Role: !GetAtt DownloadProjectLambdaExecutionRole.Arn
+      Handler: index.handler
+      Runtime: python3.12
+      MemorySize: 1024
+      Timeout: 400
+      Environment:
+        Variables:
+          SOURCE_REPOSITORY_URL: 'https://github.com/build-on-aws/bedrock-agents-infer-models/archive/refs/heads/main.zip'
+          ARTIFACT_BUCKET_NAME: !Ref ArtifactBucket
+      Code:
+        ZipFile: |
+          import boto3
+          import urllib3
+          import logging
+          import os
+          import cfnresponse  # Import the cfnresponse module
+
+          logging.basicConfig(level=logging.INFO)
+
+          def handler(event, context):
+              try:
+                  logging.info(f"Received event: {event}")
+                  s3 = boto3.client('s3')
+                  url = os.environ.get('SOURCE_REPOSITORY_URL')
+                  bucket = os.environ.get('ARTIFACT_BUCKET_NAME')
+                  key = 'project_source.zip'
+                  
+                  if not url or not bucket:
+                      logging.error("SourceRepositoryURL and ArtifactBucketName are required.")
+                      raise ValueError("SourceRepositoryURL and ArtifactBucketName are required.")
+                  
+                  http = urllib3.PoolManager()
+                  response = http.request('GET', url)
+
+                  with open('/tmp/project_source.zip', 'wb') as f:
+                      f.write(response.data)
+                  
+                  s3.upload_file('/tmp/project_source.zip', bucket, key)
+                  logging.info(f"File uploaded to S3: s3://{bucket}/{key}")
+
+                  # Send a success response to CloudFormation
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              except Exception as e:
+                  logging.error(f"Error: {str(e)}")
+                  # Send a failure response to CloudFormation
+                  cfnresponse.send(event, context, cfnresponse.FAILED, {})
+                  raise
+
+  # IAM Role for the Lambda function
+  DownloadProjectLambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: AllowS3Actions
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:PutObjectAcl'
+                Resource: !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
+
+  # Custom Resource to trigger the Lambda function
+  DownloadProjectTrigger:
+    Type: 'Custom::DownloadProject'
+    Properties:
+      ServiceToken: !GetAtt DownloadProjectFunction.Arn
+
+  # Lambda function to introduce a delay
+  DelayFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: !Sub 'DelayFunction-${AWS::AccountId}-${AWS::Region}'
+      Role: !GetAtt DelayLambdaExecutionRole.Arn
+      Handler: index.handler
+      Runtime: python3.12
+      MemorySize: 1024
+      Timeout: 400
+      Code:
+        ZipFile: |
+          import time
+          import cfnresponse
+
+          def handler(event, context):
+              try:
+                  print("Starting delay...")
+                  time.sleep(180)  # Introduce a 180-second delay
+                  print("Delay complete.")
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              except Exception as e:
+                  print(f"Error: {str(e)}")
+                  cfnresponse.send(event, context, cfnresponse.FAILED, {})
+                  raise
+
+  # IAM Role for the Delay Lambda function
+  DelayLambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  # Custom Resource to trigger the Delay Lambda function
+  DelayTrigger:
+    Type: 'Custom::Delay'
+    Properties:
+      ServiceToken: !GetAtt DelayFunction.Arn
+
+  # CodeBuild IAM Role
+  CodeBuildServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+        - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
+        - arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess
+      Policies:
+        - PolicyName: CodeBuildPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecr:*'
+                  - 'logs:*'
+                  - 's3:*'
+                Resource: '*'
+
+  # CodeBuild Project to build and push the Docker image
+  CodeBuildProject:
+    Type: 'AWS::CodeBuild::Project'
+    Properties:
+      Name: !Sub 'build-docker-image-${AWS::AccountId}-${AWS::Region}'
+      Source:
+        Type: S3
+        Location: !Sub "${ArtifactBucket}/project_source.zip"
+        BuildSpec: !Sub |
+          version: 0.2
+          phases:
+            install:
+              commands:
+                - apt-get update
+                - apt-get install -y unzip
+            pre_build:
+              commands:
+                - echo Checking contents of root directory...
+                - ls -l
+                - echo Creating /codebase directory...
+                - mkdir -p /codebase
+                - echo Checking contents of /codebase directory...
+                - ls -l /codebase || { echo "Directory /codebase does not exist"; exit 1; }
+                - echo Downloading project_source.zip from S3...
+                - aws s3 cp s3://${ArtifactBucket}/project_source.zip /codebase/project_source.zip || { echo "Failed to download file from S3"; exit 1; }
+                - echo Unzipping project_source.zip...
+                - unzip /codebase/project_source.zip -d /codebase || { echo "Unzip failed"; exit 1; }
+                - echo Logging in to Amazon ECR...
+                - aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com
+            build:
+              commands:
+                - echo Building the Docker image...
+                - docker build -t ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository} /codebase/bedrock-agents-infer-models-main/docker
+                - echo Pushing the Docker image...
+                - docker push ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}:latest
+
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:5.0
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+
+  # CodePipeline IAM Role
+  CodePipelineServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: CodePipelinePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'codebuild:*'
+                  - 's3:*'
+                  - 'ecr:*'
+                  - 'cloudformation:*'
+                Resource: '*'
+
+  # CodePipeline to orchestrate the build and deployment
+  CodePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      Name: !Sub 'pipeline-${AWS::AccountId}-${AWS::Region}'
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactBucket
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: S3
+                Version: '1'
+              OutputArtifacts:
+                - Name: SourceArtifact
+              Configuration:
+                S3Bucket: !Ref ArtifactBucket
+                S3ObjectKey: 'project_source.zip'
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              InputArtifacts:
+                - Name: SourceArtifact
+              Configuration:
+                ProjectName: !Ref CodeBuildProject
+
+Outputs:
+  ECRRepositoryName:
+    Description: 'Name of the ECR repository created'
+    Value: !Ref ECRRepository
+  CodePipelineName:
+    Description: 'Name of the CodePipeline created'
+    Value: !Ref CodePipeline

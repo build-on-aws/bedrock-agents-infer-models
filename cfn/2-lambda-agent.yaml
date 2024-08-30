@@ -1,0 +1,186 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Second stack to create Lambda function using Docker image and Bedrock agent.
+
+Resources:
+  # S3 Bucket for storing images
+  BedrockAgentImagesBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub 'bedrock-agent-images-${AWS::AccountId}-${AWS::Region}'
+
+  # IAM Role for Lambda function
+  InferModelLambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+
+  # DLQ for Lambda function
+  InferModelLambdaDLQ:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: !Sub "InferModelLambdaDLQ-${AWS::AccountId}-${AWS::Region}"
+
+  # Lambda function using the Docker image
+  InferModelLambda:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: !Sub 'InferModelLambda-${AWS::AccountId}-${AWS::Region}'
+      Role: !GetAtt InferModelLambdaExecutionRole.Arn
+      MemorySize: 1024
+      Timeout: 120
+      PackageType: Image
+      Code:
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/lambda-function-repo-${AWS::AccountId}-${AWS::Region}:latest"
+      Environment:
+        Variables:
+          S3_IMAGE_BUCKET: !Ref BedrockAgentImagesBucket
+      DeadLetterConfig:
+        TargetArn: !GetAtt InferModelLambdaDLQ.Arn
+
+  # Lambda invoke permission for Bedrock
+  LambdaInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt InferModelLambda.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: 'bedrock.amazonaws.com'
+      SourceArn: !Sub 'arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/*'
+
+  # Bedrock Agent IAM Role
+  BedrockAgentExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: bedrock.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+
+  # Bedrock Agent resource
+  BedrockAgent:
+    Type: "AWS::Bedrock::Agent"
+    Properties:
+      AgentName: !Sub 'InferModels-agent'
+      AgentResourceRoleArn: !GetAtt BedrockAgentExecutionRole.Arn
+      AutoPrepare: 'True'
+      FoundationModel: 'anthropic.claude-3-haiku-20240307-v1:0'
+      Instruction: |
+        You are a research agent that interacts with various large language models.  You pass the model ID and prompt from requests to large language models to create and store images. Then, the LLM will  return a presigned URL to the image similar to the URL example provided. You also call LLMS for text and code generation, summarization, problem solving, text-to-sql, response comparisons and ratings. Remeber. you use other large language models for inference. Do not decide when to provide your own response, unless asked. 
+
+      Description: "This is an agent that can run inference on various models by using model IDs in the request."
+      IdleSessionTTLInSeconds: 900
+      ActionGroups:
+        - ActionGroupName: "infer-model"
+          Description: "This action group is used to take the model ID and prompt provided, then run inference."
+          ActionGroupExecutor:
+            Lambda: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:InferModelLambda-${AWS::AccountId}-${AWS::Region}'
+          ApiSchema:
+            Payload: |
+              {
+                "openapi": "3.0.0",
+                "info": {
+                  "title": "Model Inference API",
+                  "description": "API for inferring a model with a prompt, and model ID.",
+                  "version": "1.0.0"
+                },
+                "paths": {
+                  "/callModel": {
+                    "post": {
+                      "description": "Call a model with a prompt, model ID, and an optional image",
+                      "parameters": [
+                        {
+                          "name": "modelId",
+                          "in": "query",
+                          "description": "The ID of the model to call",
+                          "required": true,
+                          "schema": {
+                            "type": "string"
+                          }
+                        },
+                        {
+                          "name": "prompt",
+                          "in": "query",
+                          "description": "The prompt to provide to the model",
+                          "required": true,
+                          "schema": {
+                            "type": "string"
+                          }
+                        }
+                      ],
+                      "requestBody": {
+                        "required": true,
+                        "content": {
+                          "multipart/form-data": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "modelId": {
+                                  "type": "string",
+                                  "description": "The ID of the model to call"
+                                },
+                                "prompt": {
+                                  "type": "string",
+                                  "description": "The prompt to provide to the model"
+                                },
+                                "image": {
+                                  "type": "string",
+                                  "format": "binary",
+                                  "description": "An optional image to provide to the model"
+                                }
+                              },
+                              "required": ["modelId", "prompt"]
+                            }
+                          }
+                        }
+                      },
+                      "responses": {
+                        "200": {
+                          "description": "Successful response",
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "result": {
+                                    "type": "string",
+                                    "description": "The result of calling the model with the provided prompt and optional image"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+Outputs:
+  BedrockAgentName:
+    Description: 'Name of the Bedrock Agent created'
+    Value: !Ref BedrockAgent
+  InferModelLambdaArn:
+    Description: 'ARN of the Lambda function used by the Bedrock agent'
+    Value: !GetAtt InferModelLambda.Arn
+  BedrockAgentImagesBucketName:
+    Description: 'Name of the S3 bucket created for storing images'
+    Value: !Ref BedrockAgentImagesBucket
+
+
