@@ -10,7 +10,14 @@ from langchain_community.llms.bedrock import Bedrock
 #from langchain_community.chat_models import BedrockChat
 
 s3 = boto3.client('s3')
-bucket_name = 'bedrock-agent-images'  # Replace with the name of your bucket
+
+sts_client = boto3.client('sts')
+account_id = sts_client.get_caller_identity().get('Account')
+region = boto3.Session().region_name
+
+# Construct the S3 bucket name
+bucket_name = f"bedrock-agent-images-{account_id}-{region}"
+os.environ['S3_IMAGE_BUCKET'] = bucket_name
 object_name = 'the_image.png' 
 
 logger = logging.getLogger(__name__)
