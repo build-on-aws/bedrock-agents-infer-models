@@ -250,7 +250,7 @@ Use model anthropic.claude-3-haiku-20240307-v1:0 and describe to me the image th
 ```
 
 ``` prompt
-Use model stability.stable-diffusion-xl-v0. Create an image of an astronaut riding a horse in the desert.
+Use model stability.stable-diffusion-xl-v1. Create an image of an astronaut riding a horse in the desert.
 ```
 
 ``` prompt
@@ -338,7 +338,6 @@ Use model ai21.j2-mid-v1. You are a gifted copywriter, with special expertise in
 - cohere.command-light-text-v14
 
 ### Stability AI: SDXL Models
-- stability.stable-diffusion-xl-v0
 - stability.stable-diffusion-xl-v1
 
 ### AI21labs: Jurassic models
