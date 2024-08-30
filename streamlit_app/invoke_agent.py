@@ -22,20 +22,17 @@ from PIL import Image
 agentId = "{AGENT ID}" #INPUT YOUR AGENT ID HERE
 agentAliasId = "{AGANT ALIAS ID}" # Hits draft alias, set to a specific alias id for a deployed version
 
+s3 = boto3.client('s3')
 sts_client = boto3.client('sts')
 account_id = sts_client.get_caller_identity().get('Account')
 region = boto3.Session().region_name
+theRegion = region
 
 # Construct the S3 bucket name
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
-bucket_name = os.environ.get('S3_IMAGE_BUCKET')  # Replace with the name of your bucket
 object_name = 'the_image.png' 
-
-theRegion = os.environ["AWS_REGION"]
-region = os.environ.get("AWS_REGION")
 llm_response = ""
-s3 = boto3.client('s3')
 
 def sigv4_request(
     url,
