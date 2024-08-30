@@ -19,13 +19,14 @@ from PIL import Image
 #echo $AWS_SECRET_ACCESS_KEY
 #echo $AWS_SESSION_TOKEN
 
+agentId = "{AGENT ID}" #INPUT YOUR AGENT ID HERE
+agentAliasId = "{AGANT ALIAS ID}" # Hits draft alias, set to a specific alias id for a deployed version
 
-agentId = "xx" #INPUT YOUR AGENT ID HERE
-agentAliasId = "xx" # Hits draft alias, set to a specific alias id for a deployed version
-bucket_name = 'bedrock-agent-images'
-os.environ["AWS_REGION"] = "us-west-2"
-
-image_name = 'the_image.png'
+# Construct the S3 bucket name
+bucket_name = f"bedrock-agent-images-{account_id}-{region}"
+os.environ['S3_IMAGE_BUCKET'] = bucket_name
+bucket_name = os.environ.get('S3_IMAGE_BUCKET')  # Replace with the name of your bucket
+object_name = 'the_image.png' 
 
 
 theRegion = os.environ["AWS_REGION"]
