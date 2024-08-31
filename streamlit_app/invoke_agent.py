@@ -19,19 +19,20 @@ from PIL import Image
 #echo $AWS_SECRET_ACCESS_KEY
 #echo $AWS_SESSION_TOKEN
 
+agentId = "{AGENT ID}" #INPUT YOUR AGENT ID HERE
+agentAliasId = "{AGANT ALIAS ID}" # Hits draft alias, set to a specific alias id for a deployed version
 
-agentId = "xx" #INPUT YOUR AGENT ID HERE
-agentAliasId = "xx" # Hits draft alias, set to a specific alias id for a deployed version
-bucket_name = 'bedrock-agent-images'
-os.environ["AWS_REGION"] = "us-west-2"
-
-image_name = 'the_image.png'
-
-
-theRegion = os.environ["AWS_REGION"]
-region = os.environ.get("AWS_REGION")
-llm_response = ""
 s3 = boto3.client('s3')
+sts_client = boto3.client('sts')
+account_id = sts_client.get_caller_identity().get('Account')
+region = boto3.Session().region_name
+theRegion = region
+
+# Construct the S3 bucket name
+bucket_name = f"bedrock-agent-images-{account_id}-{region}"
+os.environ['S3_IMAGE_BUCKET'] = bucket_name
+object_name = 'the_image.png' 
+llm_response = ""
 
 def sigv4_request(
     url,
@@ -40,7 +41,7 @@ def sigv4_request(
     params=None,
     headers=None,
     service='execute-api',
-    region=os.environ['AWS_REGION'],
+    region=region,
     credentials=Session().get_credentials().get_frozen_credentials()
 ):
     """Sends an HTTP request signed with SigV4
