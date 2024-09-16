@@ -140,15 +140,30 @@ def lambda_handler(event, context):
             base64_image = response_body.get("images")[0]
             base64_bytes = base64_image.encode('ascii')
             image_bytes = base64.b64decode(base64_bytes)
-            return image_bytes
+
+            # Encode the image in base64 for returning via Lambda
+            encoded_image = base64.b64encode(image_bytes).decode('utf-8')
+
+            # Return the encoded image in the response
+            return {
+                "statusCode": 200,
+                "headers": {"Content-Type": "application/json"},
+                "body": json.dumps({"image_data": encoded_image})
+            }
 
         except ClientError as err:
             message = err.response["Error"]["Message"]
             logger.error("A client error occurred: %s", message)
-            return None
+            return {
+                "statusCode": 500,
+                "body": json.dumps({"error": message})
+            }
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
-            return None
+            return {
+                "statusCode": 500,
+                "body": json.dumps({"error": str(e)})
+            }
 
     def inpaint_mask(img, box):
         """Generates a segmentation mask for inpainting."""
