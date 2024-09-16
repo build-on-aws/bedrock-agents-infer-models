@@ -502,7 +502,7 @@ def lambda_handler(event, context):
                 return {"message": "Failed to create or save the image."}
 
         # Conditional check for model_id equal to 'amazon.titan-image-generator-v1'
-        elif model_id == 'amazon.titan-image-generator-v1':
+        elif model_id == 'amazon.titan-image-generator-v1' or model_id == 'amazon.titan-image-generator-v2:0':
 
             #Modify image object_name to create a new image, and store it as modified_image.png
 
