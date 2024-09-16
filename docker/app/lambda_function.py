@@ -547,12 +547,12 @@ def lambda_handler(event, context):
             model_kwargs = get_inference_parameters(model_id)
             llm = Bedrock(
                 credentials_profile_name=os.environ.get("BWB_PROFILE_NAME"),
-                region_name=os.environ.get("BWB_REGION_NAME"),
-                endpoint_url=os.environ.get("BWB_ENDPOINT_URL"),
+                #region_name=os.environ.get("BWB_REGION_NAME"),
+                #endpoint_url=os.environ.get("BWB_ENDPOINT_URL"),
                 model_id=model_id,
-                model_kwargs=model_kwargs
+                #model_kwargs=model_kwargs
             )
-            return llm.predict(prompt)
+            return llm.invoke(input=prompt)
 
     try:
         # Main execution
