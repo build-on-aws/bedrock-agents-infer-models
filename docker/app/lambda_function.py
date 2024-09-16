@@ -6,7 +6,7 @@ import boto3
 import io
 from PIL import Image, ImageOps
 from botocore.exceptions import ClientError
-from langchain_aws import Bedrock
+from langchain_aws import BedrockLLM as Bedrock
 #from langchain_community.chat_models import BedrockChat
 
 s3 = boto3.client('s3')
