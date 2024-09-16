@@ -50,9 +50,7 @@ def lambda_handler(event, context):
         
         if(model_id.startswith('stability')):
             request_body = json.dumps({"text_prompts": 
-                                    [ {"text": prompt_content} ], #prompts to use
-                                    "cfg_scale": 9, #how closely the model tries to match the prompt
-                                    "steps": 50, }) #number of diffusion steps to perform
+                                    [ {"text": prompt_content} ]}) #prompts to use }) #number of diffusion steps to perform
             try:
                 response = client.invoke_model(body=request_body, modelId=model_id) #call the Bedrock endpoint
                 payload = json.loads(response.get('body').read()) #load the response body into a json object 
