@@ -214,10 +214,10 @@ You are a research agent that interacts with various large language models.  You
 - Now we will need to modify the **Advanced prompts**. Select the orange **Edit in Agent Builder** button at the top. Scroll down to advanced prompts, then select **Edit**.
 
 ![Diagram](images/4c.png) 
-- In `Advanced prompts`, under `Pre-processing template`, enable `Override orchestration template defaults`.
+- In `Advanced prompts`, under the `Orchestration` tab, enable the `Override orchestration template defaults` option. 
 
 ![Diagram](images/4d.png) 
-- In the ***Prompt template editor***, go to line 22-23 and Copy & paste the following prompt:
+- In the ***Prompt template editor***, go to line 22-23 and copy & paste the following prompt:
 
 ```prompt
 Here is an example of what a url response to access an image should look like:
