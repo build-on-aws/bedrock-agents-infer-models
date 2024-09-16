@@ -14,6 +14,7 @@ s3 = boto3.client('s3')
 sts_client = boto3.client('sts')
 account_id = sts_client.get_caller_identity().get('Account')
 region = boto3.Session().region_name
+bedrock = boto3.client(service_name='bedrock-runtime')
 
 # Construct the S3 bucket name
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
@@ -46,13 +47,13 @@ def lambda_handler(event, context):
             print(f"Error fetching image from S3: {e}")
             return None
 
-    def get_image_response(client, prompt_content): #text-to-text client function
+    def get_image_response(prompt_content): #text-to-text client function
         
         if(model_id.startswith('stability')):
             request_body = json.dumps({"text_prompts": 
                                     [ {"text": prompt_content} ]}) #prompts to use }) #number of diffusion steps to perform
             try:
-                response = client.invoke_model(body=request_body, modelId=model_id) #call the Bedrock endpoint
+                response = bedrock.invoke_model(body=request_body, modelId=model_id) #call the Bedrock endpoint
                 payload = json.loads(response.get('body').read()) #load the response body into a json object 
                 images = payload.get('artifacts') #extract the image artifacts
                 
@@ -137,7 +138,6 @@ def lambda_handler(event, context):
             """
 
             logger.info("Generating image with Amazon Titan Image Generator G1 model %s", model_id)
-            bedrock = boto3.client(service_name='bedrock-runtime')
             accept = "application/json"
             content_type = "application/json"
 
