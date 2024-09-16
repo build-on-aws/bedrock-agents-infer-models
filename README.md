@@ -223,7 +223,7 @@ Here is an example of what a url response to access an image should look like:
 <url_example>
   URL Generated to access the image:
   
-  https://bedrock-agent-images.s3.amazonaws.com/generated_pic.png?AWSAccessKeyId=123xyz&Signature=rlF0gN%2BuaTHzuEDfELz8GOwJacA%3D&x-amz-security-token=IQoJb3JpZ2luX2VjENH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJIMEYCIQDhxW1co7u3v0O5rt59gRQ6VzD2QEuDHuNExjM5IMnrbAIhANlEfIUbJYOakD40l7T%2F36oxQ6TsHBYJiNMOJVqRKUvhKo8DCPr%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMMDcxMDQwMjI3NTk1IgwzlaJstrewYckoQ48q4wLgSb%2BFWzU7DoeopqbophcBtyQVXc4g89lT6durG8qVDKZFPEHHPHAq8br7tmMAywipKvq5rqY8Oo2idUJbAg62FWKVRzT%2FF1UXRmsqKr6cs7spmIIbIkpyi3UXUhyK%2FP%2BhZyUJ%2BCVQTvn2DImBxIRAd7s2h7QzDbN46hyizdQA%2FKlfnURokd3nCZ2svArRjqyr0Zvm%2BCiJVRXjxAKrkNRNFCuaKDVPkC%2F7BWd3AO3WlXPtJZxUriP28uqDNuNsOBU5GMhivUv%2BTzzZdlDlgaSowxZDeWXZyoFs4r4CUW0jMUzdJjOKKTghfOukbguz8voah16ZSI22vbLMruUboBc3TTNRG145hKcGLcuFNywjt2r8fLyxywl8GteCHxuHC667P40U2bOkqSDVzBE4sLQyXJuT%2BaxyLkSsjIEDWV0bdtQeBkptjT3zC8NrcFRx0vyOnWY7aHA0zt1jw%2BfCbdKmijSfMOqo0rAGOp0B098Yen25a84pGd7pBJUkyDa0OWUBgBTuMoDetv%2FfKjstwWuYm1I%2BzSi8vb5HWXG1OO7XLs5QKsP4L6dEnbpq9xBj9%2FPlwv2YcYwJZ6CdNWIr7umFM05%2FB5%2FI3epwN3ZmgJnFxCUngJtt1TZBr%2B7GOftb3LYzU67gd2YMiwlBJ%2BV1k6jksFuIRcQ%2FzsvDvt0QUSyl7xgp8yldZJu5Jg%3D%3D&Expires=1712628409
+  https://bedrock-agent-images.s3.amazonaws.com/generated_pic.png?AWSAccessKeyId=123xyz&Signature=rlF0gN%2BuaTHzuEDfELz8GOwJacA%3D&x-amz-security-token=IQoJb3JpZ2msqKr6cs7sTNRG145hKcxCUngJtRcQ%2FzsvDvt0QUSyl7xgp8yldZJu5Jg%3D%3D&Expires=1712628409
 </url_example>
 ```
 ![Diagram](images/4e.png) 
