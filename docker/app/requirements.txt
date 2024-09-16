@@ -1,5 +1,5 @@
 
 botocore
 boto3
-langchain-community
+langchain-aws
 pillow

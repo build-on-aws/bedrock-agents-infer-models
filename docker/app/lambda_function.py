@@ -6,7 +6,7 @@ import boto3
 import io
 from PIL import Image, ImageOps
 from botocore.exceptions import ClientError
-from langchain_community.llms.bedrock import Bedrock
+from langchain_aws import Bedrock
 #from langchain_community.chat_models import BedrockChat
 
 s3 = boto3.client('s3')
@@ -72,7 +72,7 @@ def lambda_handler(event, context):
                 logging.error(f"An error occurred: {str(e)}")
                 return (f"An error occurred processing the image response:  {str(e)}")
         
-        elif(model_id == 'amazon.titan-image-generator-v1'):    
+        elif(model_id.startswith('amazon.titan-image')):    
             if "change" in prompt.lower():   #IMAGE MODIFICATION DETECTOR
                 # Fetch the image from S3 and get a BytesIO object
                 image_bytes_io = fetch_image_from_s3()
@@ -384,7 +384,7 @@ def lambda_handler(event, context):
                 "stop_sequences": ["\n\nHuman:"],
                 "anthropic_version": "bedrock-2023-05-31" 
             }
-        elif(model_id == 'amazon.titan-image-generator-v1'):
+        elif(model_id == 'amazon.titan-image-generator-v1' or model_id == 'amazon.titan-image-generator-v2:0'):
             # Check if the word "change" is in the prompt (case-insensitive). If so, this setup will be needed for IMAGE MODIFICATION (inpainting)
             if "change" in prompt.lower():
                 return {
