@@ -210,11 +210,12 @@ You are a research agent that interacts with various large language models.  You
 ```
 
 
-- Save and Exit the call-model. You should find an Orange button that says “Edit in Agent Builder” .
-- Now we will need to modify the **Advanced prompts**. Select the orange **Edit in Agent Builder** button at the top. Scroll down to advanced prompts, then select `Edit`.
+- Save and Exit the call-model. You should find an Orange button that says ***Edit in Agent Builder*** .
+- Now we will need to modify the **Advanced prompts**. Select the orange **Edit in Agent Builder** button at the top. Scroll down to advanced prompts, then select **Edit**.
 
 ![Diagram](images/4c.png) 
-- In the `Advanced prompts` box under `Pre-processing template`, enable the `Override pre-processing template defaults` option. Also, make sure that `Activate pre-processing template` is disabled. This is so that we will bypass the possibility of deny responses. We are choosing this option for simplicity. Ideally, you would modify these prompts to allow only what is required. 
+- In `Advanced prompts`, under `Pre-processing template`, enable `Override orchestration template defaults`.
+
 ![Diagram](images/4d.png) 
 - In the ***Prompt template editor***, go to line 22-23 and Copy & paste the following prompt:
 
