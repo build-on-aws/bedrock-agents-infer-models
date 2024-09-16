@@ -492,7 +492,7 @@ def lambda_handler(event, context):
                     print(e)
                     return None
 
-            image_response = get_image_response(client, prompt)
+            image_response = get_image_response(prompt)
             #generated_object_name = 'generated_images/image_{}.png'.format(int(time.time()))
             generated_object_name = object_name       
             presigned_url = save_image_to_s3(image_response, bucket_name, generated_object_name)
@@ -535,7 +535,7 @@ def lambda_handler(event, context):
                     print(e)
                     return None
 
-            image_response = get_image_response(client, prompt)
+            image_response = get_image_response(prompt)
             generated_object_name = object_name
             presigned_url = save_image_to_s3(image_response, bucket_name, generated_object_name)
             if presigned_url:
