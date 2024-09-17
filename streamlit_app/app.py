@@ -5,7 +5,7 @@ import pandas as pd
 from PIL import Image, ImageOps, ImageDraw
 
 # Streamlit page configuration
-st.set_page_config(page_title="Co. Portfolio Creator", page_icon=":robot_face:", layout="wide")
+st.set_page_config(page_title="Infer Models", page_icon=":robot_face:", layout="wide")
 
 # Function to crop image into a circle
 def crop_to_circle(image):
@@ -17,7 +17,7 @@ def crop_to_circle(image):
     return result
 
 # Title
-st.title("Co. Portfolio Creator")
+st.title("Infer Various Models")
 
 # Display a text box for input
 prompt = st.text_input("Please enter your query?", max_chars=2000)
