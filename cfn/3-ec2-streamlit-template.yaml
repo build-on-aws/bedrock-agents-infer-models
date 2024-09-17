@@ -98,11 +98,11 @@ Resources:
         - IpProtocol: tcp
           FromPort: 8501
           ToPort: 8501
-          CidrIp: 18.237.140.160/32
+          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 18.206.107.24/29
+          CidrIp: 18.237.140.160/29 #us-west-2 region
 
   # Security Group Egress Rule
   InstanceSecurityGroupEgress:
@@ -169,5 +169,9 @@ Outputs:
     Description: InstanceId of the newly created EC2 instance
     Value: !Ref EC2Instance
 
-          
+
+
+
+
+https://github.com/build-on-aws/bedrock-agents-infer-models.git
 
