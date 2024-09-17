@@ -168,10 +168,3 @@ Outputs:
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
     Value: !Ref EC2Instance
-
-
-
-
-
-https://github.com/build-on-aws/bedrock-agents-infer-models.git
-
