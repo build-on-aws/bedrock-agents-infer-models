@@ -17,7 +17,7 @@ bedrock = boto3.client(service_name='bedrock-runtime', region_name=region)
 # Construct the S3 bucket name
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
-object_name = 'the_image.png'
+object_name = 'generated_image.png'
 logger = logging.getLogger(__name__)
 
 TEXT_MODEL_IDS = [
@@ -85,9 +85,9 @@ def lambda_handler(event, context):
                 "taskType": "TEXT_IMAGE",
                 "textToImageParams": {
                     "text": prompt_content,
-                    "conditionImage": reference_image_base64, # Optionally condition on an image
-                    "controlMode": "CANNY_EDGE", # Example mode
-                    "controlStrength": 0.7       # Example control strength
+                    "conditionImage": reference_image_base64,
+                    "controlMode": "CANNY_EDGE",
+                    "controlStrength": 0.7
                 },
                 "imageGenerationConfig": {
                     "numberOfImages": 1,
@@ -102,33 +102,40 @@ def lambda_handler(event, context):
         return generate_image(model_id, request_body)
 
     def generate_image(model_id, body):
-        """Generates an image using Amazon Titan Image Generator."""
+        """Generates an image using Amazon Titan Image Generator and stores it in S3."""
         logger.info(f"Generating image with Amazon Titan Image Generator model {model_id}")
         accept = "application/json"
         content_type = "application/json"
 
         try:
+            # Invoke the Bedrock API
             response = bedrock.invoke_model(
                 body=body, modelId=model_id, accept=accept, contentType=content_type
             )
             response_body = json.loads(response.get("body").read())
             base64_image = response_body.get("images")[0]
 
-            # Decode the base64 image
+            # Decode the base64 image data
             image_bytes = base64.b64decode(base64_image)
             image = Image.open(io.BytesIO(image_bytes))
 
-            # Save image locally or process it further if needed
-            output_image_path = "/tmp/generated_image.png"
-            image.save(output_image_path)
+            # Save image locally in the Lambda /tmp directory
+            local_image_path = "/tmp/generated_image.png"
+            image.save(local_image_path)
 
-            # Optionally, upload the image back to S3 or provide a presigned URL for access
+            # Upload the image to S3
+            s3.upload_file(local_image_path, bucket_name, object_name)
+
+            # Generate a presigned URL to the uploaded image in S3
+            presigned_url = s3.generate_presigned_url('get_object', Params={'Bucket': bucket_name, 'Key': object_name}, ExpiresIn=3600)
+
+            # Return the presigned URL instead of the base64 string
             return {
                 "statusCode": 200,
                 "headers": {"Content-Type": "application/json"},
                 "body": json.dumps({
                     "message": "Image generated successfully",
-                    "image_base64": base64_image
+                    "image_url": presigned_url
                 })
             }
 
@@ -145,12 +152,6 @@ def lambda_handler(event, context):
                 "statusCode": 500,
                 "body": json.dumps({"error": str(e)})
             }
-
-    def image_to_base64(img):
-        """Converts a PIL Image or BytesIO object to a base64 string."""
-        buffer = io.BytesIO()
-        img.save(buffer, format="PNG")
-        return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     def invoke_bedrock_model(client, id, prompt, max_tokens=2000, temperature=0, top_p=0.9):
         """Invokes the converseAPI for text generation models."""
