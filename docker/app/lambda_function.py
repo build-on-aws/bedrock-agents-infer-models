@@ -17,7 +17,7 @@ bedrock = boto3.client(service_name='bedrock-runtime', region_name=region)
 # Construct the S3 bucket name
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
-object_name = 'generated_image.png'
+object_name = 'the_image.png'
 logger = logging.getLogger(__name__)
 
 TEXT_MODEL_IDS = [
