@@ -6,7 +6,6 @@ import boto3
 import io
 from PIL import Image, ImageOps
 from botocore.exceptions import ClientError
-from langchain_aws import BedrockLLM as Bedrock
 
 s3 = boto3.client('s3')
 
@@ -53,7 +52,6 @@ def lambda_handler(event, context):
     def fetch_image_from_s3():
         """Fetches an image from an S3 bucket and returns it as a BytesIO object."""
         image_content = io.BytesIO()
-        
         try:
             s3.download_fileobj(bucket_name, object_name, image_content)
             print("Image successfully fetched from S3.")
@@ -64,71 +62,48 @@ def lambda_handler(event, context):
 
     def get_image_response(prompt_content):
         """Handles image generation models."""
-        if model_id.startswith('stability'):
-            request_body = json.dumps({"text_prompts": [{"text": prompt_content}]})
-            try:
-                response = bedrock.invoke_model(body=request_body, modelId=model_id)
-                payload = json.loads(response.get('body').read())
-                images = payload.get('artifacts')
-                
-                if not images or 'base64' not in images[0]:
-                    logging.error("No images found or 'base64' key is missing.")
-                    return "No image data found in the response."
-                
-                image_data = base64.b64decode(images[0].get('base64'))
-                image = io.BytesIO(image_data)
-                return image
+        if model_id == 'amazon.titan-image-generator-v1':
+            request_body = json.dumps({
+                "taskType": "TEXT_IMAGE",
+                "textToImageParams": {
+                    "text": prompt_content
+                },
+                "imageGenerationConfig": {
+                    "numberOfImages": 1,
+                    "quality": "standard",
+                    "height": 1024,
+                    "width": 1024,
+                    "cfgScale": 7.5,
+                    "seed": 42
+                }
+            })
 
-            except Exception as e:
-                logging.error(f"An error occurred: {str(e)}")
-                return f"An error occurred processing the image response: {str(e)}"
-        
-        elif model_id.startswith('amazon.titan-image'):
-            if "change" in prompt.lower():
-                image_bytes_io = fetch_image_from_s3()
-                s3_image = Image.open(image_bytes_io)
-                image_size = s3_image.size
-                print(f"Image size: {image_size}")
+        elif model_id == 'amazon.titan-image-generator-v2:0':
+            # Example for a v2 model with a reference image, adjust as needed
+            reference_image_base64 = fetch_image_from_s3()
+            request_body = json.dumps({
+                "taskType": "TEXT_IMAGE",
+                "textToImageParams": {
+                    "text": prompt_content,
+                    "conditionImage": reference_image_base64, # Optionally condition on an image
+                    "controlMode": "CANNY_EDGE", # Example mode
+                    "controlStrength": 0.7       # Example control strength
+                },
+                "imageGenerationConfig": {
+                    "numberOfImages": 1,
+                    "seed": 42
+                }
+            })
 
-                box = ((image_size[0] - 300) // 2, image_size[1] - 300, (image_size[0] + 300) // 2, image_size[1] - 200)
-                mask = inpaint_mask(s3_image, box)
-                print("THE MASK ON IMAGE MOD: ", mask)
+        else:
+            logger.error(f"Unsupported image model ID: {model_id}")
+            return "Unsupported image model ID."
 
-                request_body = json.dumps({
-                    "taskType": "INPAINTING",
-                    "inPaintingParams": {
-                        "text": prompt_content,
-                        "image": image_to_base64(s3_image),
-                        "maskImage": image_to_base64(mask)
-                    },
-                    "imageGenerationConfig": {
-                        "numberOfImages": 1,
-                        "quality": "premium",
-                        "height": 1024,
-                        "width": 1024,
-                        "cfgScale": 7.5,
-                        "seed": 42
-                    }
-                })
-
-            else:
-                request_body = json.dumps({
-                    "taskType": "TEXT_IMAGE",
-                    "textToImageParams": {"text": prompt_content},
-                    "imageGenerationConfig": {
-                        "numberOfImages": 1,
-                        "height": 1024,
-                        "width": 1024,
-                        "cfgScale": 8.0,
-                        "seed": 0
-                    }
-                })
-            
-            return generate_image(model_id, request_body)
+        return generate_image(model_id, request_body)
 
     def generate_image(model_id, body):
         """Generates an image using Amazon Titan Image Generator."""
-        logger.info("Generating image with Amazon Titan Image Generator G1 model %s", model_id)
+        logger.info(f"Generating image with Amazon Titan Image Generator model {model_id}")
         accept = "application/json"
         content_type = "application/json"
 
@@ -138,17 +113,23 @@ def lambda_handler(event, context):
             )
             response_body = json.loads(response.get("body").read())
             base64_image = response_body.get("images")[0]
-            base64_bytes = base64_image.encode('ascii')
-            image_bytes = base64.b64decode(base64_bytes)
 
-            # Encode the image in base64 for returning via Lambda
-            encoded_image = base64.b64encode(image_bytes).decode('utf-8')
+            # Decode the base64 image
+            image_bytes = base64.b64decode(base64_image)
+            image = Image.open(io.BytesIO(image_bytes))
 
-            # Return the encoded image in the response
+            # Save image locally or process it further if needed
+            output_image_path = "/tmp/generated_image.png"
+            image.save(output_image_path)
+
+            # Optionally, upload the image back to S3 or provide a presigned URL for access
             return {
                 "statusCode": 200,
                 "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"image_data": encoded_image})
+                "body": json.dumps({
+                    "message": "Image generated successfully",
+                    "image_base64": base64_image
+                })
             }
 
         except ClientError as err:
@@ -164,22 +145,6 @@ def lambda_handler(event, context):
                 "statusCode": 500,
                 "body": json.dumps({"error": str(e)})
             }
-
-    def inpaint_mask(img, box):
-        """Generates a segmentation mask for inpainting."""
-        img_size = img.size
-        assert len(box) == 4  
-        assert box[0] < box[2]
-        assert box[1] < box[3]
-        return ImageOps.expand(
-            Image.new(
-                mode="RGB",
-                size=(box[2] - box[0], box[3] - box[1]),
-                color='black'
-            ),
-            border=(box[0], box[1], img_size[0] - box[2], img_size[1] - box[3]),
-            fill='white'
-        )
 
     def image_to_base64(img):
         """Converts a PIL Image or BytesIO object to a base64 string."""
