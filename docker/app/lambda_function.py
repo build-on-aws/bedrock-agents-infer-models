@@ -50,12 +50,16 @@ def lambda_handler(event, context):
     print("PROMPT: " + prompt)
 
     def fetch_image_from_s3():
-        """Fetches an image from an S3 bucket and returns it as a BytesIO object."""
+        """Fetches an image from an S3 bucket and returns it as a base64-encoded string."""
         image_content = io.BytesIO()
         try:
             s3.download_fileobj(bucket_name, object_name, image_content)
-            print("Image successfully fetched from S3.")
-            return image_content
+            image_content.seek(0)  # Move to the beginning of the file
+            
+            # Encode the image in base64
+            encoded_image = base64.b64encode(image_content.getvalue()).decode('utf-8')
+            print("Image successfully fetched and encoded from S3.")
+            return encoded_image
         except Exception as e:
             print(f"Error fetching image from S3: {e}")
             return None
@@ -79,8 +83,11 @@ def lambda_handler(event, context):
             })
 
         elif model_id == 'amazon.titan-image-generator-v2:0':
-            # Example for a v2 model with a reference image, adjust as needed
+            # Example for a v2 model with a reference image, encoded in base64
             reference_image_base64 = fetch_image_from_s3()
+            if not reference_image_base64:
+                return {"statusCode": 500, "body": json.dumps({"error": "Failed to fetch reference image from S3"})}
+            
             request_body = json.dumps({
                 "taskType": "TEXT_IMAGE",
                 "textToImageParams": {
