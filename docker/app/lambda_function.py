@@ -4,7 +4,6 @@ import base64
 import logging
 import boto3
 import io
-import random
 from PIL import Image
 from botocore.exceptions import ClientError
 
@@ -21,10 +20,10 @@ bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
 object_name = 'the_image.png'
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 # Define model IDs
 TEXT_MODEL_IDS = [
+    # Add your list of text models here
     "amazon.titan-text-premier-v1:0",
     "amazon.titan-text-express-v1",
     "amazon.titan-text-lite-v1",
@@ -42,28 +41,18 @@ TEXT_MODEL_IDS = [
     "mistral.mistral-small-2402-v1:0"
 ]
 
-# Mapping for Bedrock and Stability AI Models
-IMAGE_MODEL_IDS = {
-    "Stable Diffusion": "stability.stable-diffusion-xl-v1",
-    "Amazon Titan V1": "amazon.titan-image-generator-v1",
-    "Amazon Titan V2": "amazon.titan-image-generator-v2:0",
-    "Stable Diffusion Large V3": "stability.sd3-large-v1:0",
-    "Stable Image Ultra": "stability.stable-image-ultra-v1:0",
-    "Stable Image Core": "stability.stable-image-core-v1:0"
-}
-
 FALCON_MODEL_ENDPOINT = os.getenv('ENDPOINT')
 
 def get_named_parameter(event, name):
-    """Fetch a specific named parameter from event."""
     return next(item for item in event['parameters'] if item['name'] == name)['value']
 
 def lambda_handler(event, context):
     print(event)
     
+
     # Determine the API path
-    api_path = event.get('apiPath', '/unknown')
-    
+    api_path = event['apiPath']
+
     if api_path == '/callBedrockModel':
         return call_model(event)
     elif api_path == '/callFalconModel':
@@ -76,11 +65,11 @@ def call_model(event):
     model_id = get_named_parameter(event, 'modelId')
     prompt = get_named_parameter(event, 'prompt')
 
-    logger.info(f"MODEL ID: {model_id}")
-    logger.info(f"PROMPT: {prompt}")
+    print(f"MODEL ID: {model_id}")
+    print(f"PROMPT: {prompt}")
 
     # Call appropriate function based on the model ID
-    if model_id.startswith('amazon.titan-image') or model_id in IMAGE_MODEL_IDS.values():
+    if model_id.startswith('amazon.titan-image'):
         result = get_image_response(model_id, prompt)
     else:
         result = get_text_response(model_id, prompt)
@@ -95,16 +84,17 @@ def call_falcon_model(event):
         response = sagemaker_runtime.invoke_endpoint(
             EndpointName=FALCON_MODEL_ENDPOINT,
             ContentType='application/json',
-            Body=json.dumps({"inputs": prompt}).encode('utf-8')  # Corrected encoding
+            Body=json.dumps({"inputs": prompt})  # Corrected here
         )
         
-        response_body = json.loads(response['Body'].read().decode('utf-8'))
+        response_body = json.loads(response['Body'].read().decode())
         result = {"result": response_body}
         return build_response(200, result, event)
 
     except ClientError as e:
         logger.error(f"Error calling Falcon model: {str(e)}")
         return build_response(500, 'Error calling Falcon model', event)
+
 
 def get_text_response(model_id, prompt):
     """Handles text-based models."""
@@ -116,44 +106,72 @@ def get_text_response(model_id, prompt):
 
 def get_image_response(model_id, prompt):
     """Handles image generation models."""
-    if model_id in IMAGE_MODEL_IDS.values():
-        return generate_image_request(model_id, prompt)
+    if model_id == 'amazon.titan-image-generator-v1':
+        return generate_image_request_v1(model_id, prompt)
+    
+    elif model_id == 'amazon.titan-image-generator-v2:0':
+        return generate_image_request_v2(model_id, prompt)
+    
+    elif model_id == 'stability.stable-diffusion-xl-v1':
+          request_body = json.dumps({
+                "text_prompts":[
+                    {
+                        "text": prompt
+                    }],
+                "cfg_scale":10,
+                "seed": 4294967295,
+                "steps":50
+        })        
+
+    elif model_id == 'stability.sd3-large-v1:0' or model_id == 'stability.stable-image-core-v1:0' or model_id == 'stability.stable-image-ultra-v1:0':
+        request_body = json.dumps({
+                "prompt": prompt
+        })  
+        return request_body
+    
     else:
         logger.error(f"Unsupported image model ID: {model_id}")
         return {"error": "Unsupported image model ID"}
 
-def generate_image_request(model_id, prompt):
-    """Handles requests for Stable Diffusion and Amazon Titan models."""
-    rand_seed = generate_random_seed(0, 4294967295)
-
-    # Handling Stable Diffusion XL models
-    if model_id == "stability.stable-diffusion-xl-v1":
-        request_body = {
-            "text_prompts": [{"text": prompt}],
-            "cfg_scale": 10,
-            "seed": rand_seed,
-            "steps": 50
+def generate_image_request_v1(model_id, prompt):
+    """Handles requests for amazon.titan-image-generator-v1."""
+    request_body = json.dumps({
+        "taskType": "TEXT_IMAGE",
+        "textToImageParams": {
+            "text": prompt
+        },
+        "imageGenerationConfig": {
+            "numberOfImages": 1,
+            "quality": "standard",
+            "height": 1024,
+            "width": 1024,
+            "cfgScale": 7.5,
+            "seed": 42
         }
-    elif model_id in ["stability.sd3-large-v1:0", "stability.stable-image-core-v1:0", "stability.stable-image-ultra-v1:0"]:
-        request_body = {"prompt": prompt}
-    else:
-        # Default handling for Amazon Titan and other models
-        request_body = {
-            "taskType": "TEXT_IMAGE",
-            "textToImageParams": {
-                "text": prompt
-            },
-            "imageGenerationConfig": {
-                "numberOfImages": 1,
-                "quality": "premium",
-                "height": 768,
-                "width": 1280,
-                "cfgScale": 7.5,
-                "seed": rand_seed
-            }
-        }
+    })
+    return generate_image(model_id, request_body)
 
-    return generate_image(model_id, json.dumps(request_body))
+def generate_image_request_v2(model_id, prompt):
+    """Handles requests for amazon.titan-image-generator-v2:0 with reference image."""
+    reference_image_base64 = fetch_image_from_s3()
+    if not reference_image_base64:
+        return {"error": "Failed to fetch reference image from S3"}
+    
+    request_body = json.dumps({
+        "taskType": "TEXT_IMAGE",
+        "textToImageParams": {
+            "text": prompt
+        },
+        "imageGenerationConfig": {
+            "numberOfImages": 1,
+            "quality": "premium",
+            "height": 768,
+            "width": 1280,
+            "cfgScale": 7.5,
+            "seed": 42
+        }
+    })
+    return generate_image(model_id, request_body)
 
 def generate_image(model_id, body):
     """Generates an image and uploads it to S3."""
@@ -180,10 +198,6 @@ def generate_image(model_id, body):
     except Exception as e:
         logger.error(f"Error occurred: {str(e)}")
         return {"error": str(e)}
-
-def generate_random_seed(min_value, max_value):
-    """Generates a random seed."""
-    return random.randint(min_value, max_value)
 
 def fetch_image_from_s3():
     """Fetches an image from S3 and returns it as a base64-encoded string."""
