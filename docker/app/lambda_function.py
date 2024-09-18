@@ -18,9 +18,9 @@ sagemaker_runtime = boto3.client('sagemaker-runtime', region_name=region)
 # Set up environment variables
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
-os.environ['SAGEMAKER_ENDPOINT'] = "{ENDPOINT HERE}"
 object_name = 'the_image.png'
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 # Define model IDs
 TEXT_MODEL_IDS = [
@@ -42,18 +42,20 @@ TEXT_MODEL_IDS = [
     "mistral.mistral-small-2402-v1:0"
 ]
 
+# Fetch Falcon model endpoint name from environment variables
 FALCON_MODEL_ENDPOINT = os.getenv('ENDPOINT')
 
 def get_named_parameter(event, name):
+    """Fetch a specific named parameter from event."""
     return next(item for item in event['parameters'] if item['name'] == name)['value']
 
 def lambda_handler(event, context):
+    """Main Lambda handler."""
     print(event)
     
-
     # Determine the API path
-    api_path = event['apiPath']
-
+    api_path = event.get('apiPath', '/unknown')
+    
     if api_path == '/callBedrockModel':
         return call_model(event)
     elif api_path == '/callFalconModel':
@@ -62,12 +64,12 @@ def lambda_handler(event, context):
         return build_response(404, 'Invalid API path', event)
 
 def call_model(event):
-    """Handles requests for text/image models."""
+    """Handles requests for Bedrock text/image models."""
     model_id = get_named_parameter(event, 'modelId')
     prompt = get_named_parameter(event, 'prompt')
 
-    print(f"MODEL ID: {model_id}")
-    print(f"PROMPT: {prompt}")
+    logger.info(f"MODEL ID: {model_id}")
+    logger.info(f"PROMPT: {prompt}")
 
     # Call appropriate function based on the model ID
     if model_id.startswith('amazon.titan-image'):
@@ -83,19 +85,18 @@ def call_falcon_model(event):
 
     try:
         response = sagemaker_runtime.invoke_endpoint(
-            EndpointName=FALCON_MODEL_ENDPOINT,
-            ContentType='application/json',
-            Body=json.dumps({"inputs": prompt})  # Corrected here
+            EndpointName=FALCON_MODEL_ENDPOINT,   # Ensure the correct endpoint name
+            ContentType='application/json',       # Content type for JSON payload
+            Body=json.dumps({"inputs": prompt}).encode('utf-8')  # Convert the prompt to bytes
         )
         
-        response_body = json.loads(response['Body'].read().decode())
+        response_body = json.loads(response['Body'].read().decode('utf-8'))
         result = {"result": response_body}
         return build_response(200, result, event)
 
     except ClientError as e:
         logger.error(f"Error calling Falcon model: {str(e)}")
         return build_response(500, 'Error calling Falcon model', event)
-
 
 def get_text_response(model_id, prompt):
     """Handles text-based models."""
