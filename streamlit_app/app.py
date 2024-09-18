@@ -125,3 +125,33 @@ for index, chat in enumerate(reversed(st.session_state['history'])):
         with col2_a:
             # Generate a unique key for each answer text area
             st.text_area("A:", value=chat["answer"], height=100, key=f"answer_{index}")
+
+# Model prompts structured for Streamlit display
+model_prompts = [
+    {
+        'Models': [
+            {"amazon.titan-text-premier-v1:0"},
+            {"amazon.titan-text-express-v1"},
+            {"amazon.titan-text-lite-v1"},
+            {"ai21.j2-ultra-v1"},
+            {"ai21.j2-mid-v1"},
+            {"anthropic.claude-3-sonnet-20240229-v1:0"},
+            {"anthropic.claude-3-haiku-20240307-v1:0"},
+            {"cohere.command-r-plus-v1:0"},
+            {"cohere.command-r-v1:0"},
+            {"meta.llama3-70b-instruct-v1:0"},
+            {"meta.llama3-8b-instruct-v1:0"},
+            {"mistral.mistral-large-2402-v1:0"},
+            {"mistral.mixtral-8x7b-instruct-v0:1"},
+            {"mistral.mistral-7b-instruct-v0:2"},
+            {"mistral.mistral-small-2402-v1:0"}
+        ]     
+    }
+]
+
+
+
+# Displaying the prompts as tables
+st.write("### Model Prompts by Category")
+for category in model_prompts:
+    st.table(category['Models'])
