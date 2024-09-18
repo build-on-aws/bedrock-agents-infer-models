@@ -18,6 +18,7 @@ sagemaker_runtime = boto3.client('sagemaker-runtime', region_name=region)
 # Set up environment variables
 bucket_name = f"bedrock-agent-images-{account_id}-{region}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
+os.environ['SAGEMAKER_ENDPOINT'] = "{ENDPOINT HERE}"
 object_name = 'the_image.png'
 logger = logging.getLogger(__name__)
 
@@ -84,7 +85,7 @@ def call_falcon_model(event):
         response = sagemaker_runtime.invoke_endpoint(
             EndpointName=FALCON_MODEL_ENDPOINT,
             ContentType='application/json',
-            Body=json.dumps({"prompt": prompt})
+            Body=json.dumps({"inputs": prompt})  # Corrected here
         )
         
         response_body = json.loads(response['Body'].read().decode())
@@ -94,6 +95,7 @@ def call_falcon_model(event):
     except ClientError as e:
         logger.error(f"Error calling Falcon model: {str(e)}")
         return build_response(500, 'Error calling Falcon model', event)
+
 
 def get_text_response(model_id, prompt):
     """Handles text-based models."""
