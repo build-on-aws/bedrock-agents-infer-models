@@ -129,7 +129,7 @@ for index, chat in enumerate(reversed(st.session_state['history'])):
 # Model prompts structured for Streamlit display
 model_prompts = [
     {
-        'Models': [
+        'Supported_Models': [
             {"amazon.titan-text-premier-v1:0"},
             {"amazon.titan-text-express-v1"},
             {"amazon.titan-text-lite-v1"},
@@ -155,4 +155,4 @@ model_prompts = [
 # Displaying the prompts as tables
 st.write("### Model Prompts by Category")
 for category in model_prompts:
-    st.table(category['Models'])
+    st.table(category['Supported_Models'])
