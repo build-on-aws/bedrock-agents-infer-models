@@ -145,7 +145,7 @@ model_prompts = [
             {"mistral.mixtral-8x7b-instruct-v0:1"},
             {"mistral.mistral-7b-instruct-v0:2"},
             {"mistral.mistral-small-2402-v1:0"},
-            {"Amazon Titan": "amazon.titan-image-generator-v1"}    
+            {"amazon.titan-image-generator-v1"}    
         ]     
     }
 ]
