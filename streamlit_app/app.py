@@ -1,4 +1,4 @@
-import invoke_agent as agenthelper
+import InvokeAgent as agenthelper
 import streamlit as st
 import json
 import pandas as pd
@@ -53,7 +53,7 @@ def format_response(response_body):
 # Handling user input and responses
 if submit_button and prompt:
     event = {
-        "sessionId": "MYSESSION",
+        "sessionId": "MYSESSION115",
         "question": prompt
     }
     response = agenthelper.lambda_handler(event, None)
@@ -86,7 +86,7 @@ if submit_button and prompt:
 if end_session_button:
     st.session_state['history'].append({"question": "Session Ended", "answer": "Thank you for using AnyCompany Support Agent!"})
     event = {
-        "sessionId": "MYSESSION",
+        "sessionId": "MYSESSION115",
         "question": "placeholder to end session",
         "endSession": True
     }
@@ -97,8 +97,8 @@ if end_session_button:
 st.write("## Conversation History")
 
 # Load images outside the loop to optimize performance
-human_image = Image.open('/home/ubuntu/app/streamlit_app/human_face.png')
-robot_image = Image.open('/home/ubuntu/app/streamlit_app/robot_face.jpg')
+human_image = Image.open('./human_face.png')
+robot_image = Image.open('./robot_face.jpg')
 circular_human_image = crop_to_circle(human_image)
 circular_robot_image = crop_to_circle(robot_image)
 
@@ -129,7 +129,7 @@ for index, chat in enumerate(reversed(st.session_state['history'])):
 # Model prompts structured for Streamlit display
 model_prompts = [
     {
-        'Supported_Models': [
+        'Models': [
             {"amazon.titan-text-premier-v1:0"},
             {"amazon.titan-text-express-v1"},
             {"amazon.titan-text-lite-v1"},
@@ -145,7 +145,13 @@ model_prompts = [
             {"mistral.mixtral-8x7b-instruct-v0:1"},
             {"mistral.mistral-7b-instruct-v0:2"},
             {"mistral.mistral-small-2402-v1:0"},
-            {"amazon.titan-image-generator-v1"}    
+            {"Stable Diffusion": "stability.stable-diffusion-xl-v1"},
+            {"Stable Diffusion 3 Large": "stability.sd3-large-v1:0"},
+            {"Amazon Titan": "amazon.titan-image-generator-v1"},
+            {"Amazon Titan V2": "amazon.titan-image-generator-v2:0"},
+            {"Stable Image Ultra": "stability.stable-image-ultra-v1:0"},
+            {"Stable Image Core": "stability.stable-image-core-v1:0"}
+            
         ]     
     }
 ]
@@ -155,4 +161,4 @@ model_prompts = [
 # Displaying the prompts as tables
 st.write("### Model Prompts by Category")
 for category in model_prompts:
-    st.table(category['Supported_Models'])
+    st.table(category['Models'])
