@@ -46,6 +46,7 @@ Resources:
       Environment:
         Variables:
           S3_IMAGE_BUCKET: !Ref BedrockAgentImagesBucket
+          ENDPOINT: "SAGEMAKER_ENDPOINT"  # Added environment variable
       DeadLetterConfig:
         TargetArn: !GetAtt InferModelLambdaDLQ.Arn
 
@@ -331,5 +332,3 @@ Outputs:
   BedrockAgentImagesBucketName:
     Description: 'Name of the S3 bucket created for storing images'
     Value: !Ref BedrockAgentImagesBucket
-
-
