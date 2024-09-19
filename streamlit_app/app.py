@@ -145,13 +145,7 @@ model_prompts = [
             {"mistral.mixtral-8x7b-instruct-v0:1"},
             {"mistral.mistral-7b-instruct-v0:2"},
             {"mistral.mistral-small-2402-v1:0"},
-            {"Stable Diffusion": "stability.stable-diffusion-xl-v1"},
-            {"Stable Diffusion 3 Large": "stability.sd3-large-v1:0"},
-            {"Amazon Titan": "amazon.titan-image-generator-v1"},
-            {"Amazon Titan V2": "amazon.titan-image-generator-v2:0"},
-            {"Stable Image Ultra": "stability.stable-image-ultra-v1:0"},
-            {"Stable Image Core": "stability.stable-image-core-v1:0"}
-            
+            {"Amazon Titan": "amazon.titan-image-generator-v1"}    
         ]     
     }
 ]
