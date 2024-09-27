@@ -5,7 +5,7 @@ import pandas as pd
 from PIL import Image, ImageOps, ImageDraw
 
 # Streamlit page configuration
-st.set_page_config(page_title="Webscrape Agent", page_icon=":robot_face:", layout="wide")
+st.set_page_config(page_title="Infer Models", page_icon=":robot_face:", layout="wide")
 
 # Function to crop image into a circle
 def crop_to_circle(image):
@@ -17,7 +17,7 @@ def crop_to_circle(image):
     return result
 
 # Title
-st.title("Webscrape Agent")
+st.title("Infer Various Models")
 
 # Display a text box for input
 prompt = st.text_input("Please enter your query?", max_chars=2000)
@@ -31,9 +31,6 @@ end_session_button = st.button("End Session")
 
 # Sidebar for user input
 st.sidebar.title("Trace Data")
-
-
-
 
 # Session State Management
 if 'history' not in st.session_state:
@@ -53,12 +50,10 @@ def format_response(response_body):
         # If response is not JSON, return as is
         return response_body
 
-
-
 # Handling user input and responses
 if submit_button and prompt:
     event = {
-        "sessionId": "MYSESSION",
+        "sessionId": "MYSESSION115",
         "question": prompt
     }
     response = agenthelper.lambda_handler(event, None)
@@ -86,73 +81,79 @@ if submit_button and prompt:
     st.sidebar.text_area("", value=all_data, height=300)
     st.session_state['history'].append({"question": prompt, "answer": the_response})
     st.session_state['trace_data'] = the_response
-
-    
-    
+  
 
 if end_session_button:
     st.session_state['history'].append({"question": "Session Ended", "answer": "Thank you for using AnyCompany Support Agent!"})
     event = {
-        "sessionId": "MYSESSION",
+        "sessionId": "MYSESSION115",
         "question": "placeholder to end session",
         "endSession": True
     }
     agenthelper.lambda_handler(event, None)
     st.session_state['history'].clear()
 
-
 # Display conversation history
 st.write("## Conversation History")
 
-for chat in reversed(st.session_state['history']):
-    
+# Load images outside the loop to optimize performance
+human_image = Image.open('./app/streamlit_app/human_face.png')
+robot_image = Image.open('./app/streamlit_app/robot_face.jpg')
+circular_human_image = crop_to_circle(human_image)
+circular_robot_image = crop_to_circle(robot_image)
+
+for index, chat in enumerate(reversed(st.session_state['history'])):
     # Creating columns for Question
     col1_q, col2_q = st.columns([2, 10])
     with col1_q:
-        human_image = Image.open('/home/ubuntu/app/streamlit_app/human_face.png')
-        circular_human_image = crop_to_circle(human_image)
         st.image(circular_human_image, width=125)
     with col2_q:
-        st.text_area("Q:", value=chat["question"], height=50, key=str(chat)+"q", disabled=True)
+        # Generate a unique key for each question text area
+        st.text_area("Q:", value=chat["question"], height=50, key=f"question_{index}", disabled=True)
 
     # Creating columns for Answer
     col1_a, col2_a = st.columns([2, 10])
     if isinstance(chat["answer"], pd.DataFrame):
         with col1_a:
-            robot_image = Image.open('/home/ubuntu/app/streamlit_app/robot_face.jpg')
-            circular_robot_image = crop_to_circle(robot_image)
             st.image(circular_robot_image, width=100)
         with col2_a:
-            st.dataframe(chat["answer"])
+            # Generate a unique key for each answer dataframe
+            st.dataframe(chat["answer"], key=f"answer_df_{index}")
     else:
         with col1_a:
-            robot_image = Image.open('/home/ubuntu/app/streamlit_app/robot_face.jpg')
-            circular_robot_image = crop_to_circle(robot_image)
             st.image(circular_robot_image, width=150)
         with col2_a:
-            st.text_area("A:", value=chat["answer"], height=100, key=str(chat)+"a")
+            # Generate a unique key for each answer text area
+            st.text_area("A:", value=chat["answer"], height=100, key=f"answer_{index}")
+
+# Model prompts structured for Streamlit display
+model_prompts = [
+    {
+        'Models': [
+            {"amazon.titan-text-premier-v1:0"},
+            {"amazon.titan-text-express-v1"},
+            {"amazon.titan-text-lite-v1"},
+            {"ai21.j2-ultra-v1"},
+            {"ai21.j2-mid-v1"},
+            {"anthropic.claude-3-sonnet-20240229-v1:0"},
+            {"anthropic.claude-3-haiku-20240307-v1:0"},
+            {"cohere.command-r-plus-v1:0"},
+            {"cohere.command-r-v1:0"},
+            {"meta.llama3-70b-instruct-v1:0"},
+            {"meta.llama3-8b-instruct-v1:0"},
+            {"mistral.mistral-large-2402-v1:0"},
+            {"mistral.mixtral-8x7b-instruct-v0:1"},
+            {"mistral.mistral-7b-instruct-v0:2"},
+            {"mistral.mistral-small-2402-v1:0"},
+            {"Amazon Titan": "amazon.titan-image-generator-v1"}
+            
+        ]     
+    }
+]
 
 
-# Example Prompts Section
 
-
-# Increase the maximum width of the text in each cell of the dataframe
-pd.set_option('display.max_colwidth', None)
-
-# Define the queries and their descriptions
-query_data = {
-    "Test Prompts": [
-        "Webscrape this url and tell me the main features of pikachu 'https://www.pokemon.com/us/pokedex/pikachu'",
-        "Webscrape this url and tell me the main villians that Goku had to fight on planet earth 'https://en.wikipedia.org/wiki/Goku'",
-        "Webscrape this url and tell me about data modeling: https://schema.org/docs/datamodel.html"
-        "Do an internet search and tell me the top 3 best traits about lebron james",
-        "Do an internet search and tell me the top 3 strongest features of charizard from pokemon"
-    ]
-}
-
-# Create DataFrame
-queries_df = pd.DataFrame(query_data)
-
-# Display the DataFrame in Streamlit
-st.write("## Test Prompts for Amazon Athena")
-st.dataframe(queries_df, width=900)  # Adjust the width to fit your layout
+# Displaying the prompts as tables
+st.write("### Model Prompts by Category")
+for category in model_prompts:
+    st.table(category['Models'])
