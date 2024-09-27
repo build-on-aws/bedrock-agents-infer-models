@@ -5,7 +5,7 @@ import pandas as pd
 from PIL import Image, ImageOps, ImageDraw
 
 # Streamlit page configuration
-st.set_page_config(page_title="Text2SQL Agent", page_icon=":robot_face:", layout="wide")
+st.set_page_config(page_title="Webscrape Agent", page_icon=":robot_face:", layout="wide")
 
 # Function to crop image into a circle
 def crop_to_circle(image):
@@ -17,7 +17,7 @@ def crop_to_circle(image):
     return result
 
 # Title
-st.title("Text2SQL Agent - Amazon Athena")
+st.title("Webscrape Agent")
 
 # Display a text box for input
 prompt = st.text_input("Please enter your query?", max_chars=2000)
@@ -142,12 +142,11 @@ pd.set_option('display.max_colwidth', None)
 # Define the queries and their descriptions
 query_data = {
     "Test Prompts": [
-        "Show me all procedures in the imaging category that are insured.",
-        "Return to me the number of procedures that are in the laboratory category.",
-        "Let me see the number of procedures that are either in the laboratory, imaging, or surgery category, and insured.",
-        "Return me information on all customers who have a past due amount over 70.",
-        "Provide me details on all customers who are VIP, and have a balance over 300.",
-        "Get me data of all procedures that were not insured, with customer names."
+        "Webscrape this url and tell me the main features of pikachu 'https://www.pokemon.com/us/pokedex/pikachu'",
+        "Webscrape this url and tell me the main villians that Goku had to fight on planet earth 'https://en.wikipedia.org/wiki/Goku'",
+        "Webscrape this url and tell me about data modeling: https://schema.org/docs/datamodel.html"
+        "Do an internet search and tell me the top 3 best traits about lebron james",
+        "Do an internet search and tell me the top 3 strongest features of charizard from pokemon"
     ]
 }
 
