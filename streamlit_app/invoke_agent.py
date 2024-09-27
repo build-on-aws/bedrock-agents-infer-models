@@ -10,16 +10,18 @@ import io
 import sys
 
 #For this to run on a local machine in VScode, you need to set the AWS_PROFILE environment variable to the name of the profile/credentials you want to use. 
+#You also need to input your model ID near the bottom of this file.
 
 #check for credentials
 #echo $AWS_ACCESS_KEY_ID
 #echo $AWS_SECRET_ACCESS_KEY
 #echo $AWS_SESSION_TOKEN
+#os.environ["AWS_PROFILE"] = "agent-demo"
 
 agentId = "<YOUR AGENT ID>" #INPUT YOUR AGENT ID HERE
-agentAliasId = "<YOUR ALIAS ID>" #INPUT YOUR ALIAS ID HERE
-theRegion = "us-west-2"
+agentAliasId = "<YOUR ALIAS ID>" # Hits draft alias, set to a specific alias id for a deployed version
 
+theRegion = "us-west-2"
 os.environ["AWS_REGION"] = theRegion
 region = os.environ.get("AWS_REGION")
 llm_response = ""
@@ -170,10 +172,8 @@ def lambda_handler(event, context):
     
     try: 
         response, trace_data = askQuestion(question, url, endSession)
-        
         return {
             "status_code": 200,
-            #"body": json.dumps({"response": response, "trace_data": trace_data})
             "body": json.dumps({"response": response, "trace_data": trace_data})
         }
     except Exception as e:
