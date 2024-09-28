@@ -3,7 +3,7 @@
 ## Introduction
 This project serves as a baseline for developers to extend their use cases across various large language models (LLMs) using Amazon Bedrock agents. The goal is to showcase the potential of leveraging multiple models on Bedrock to create chained responses that adapt to diverse scenarios. 
 
-For those who prefer an Infrastructure-as-Code (IaC) approach, we also provide an AWS CloudFormation template that sets up the core components like an Amazon Bedrock agent, S3 bucket, and a Lambda function. If you'd prefer to deploy this project via AWS CloudFormation, please refer to the workshop guide [here](https://studio.us-east-1.prod.workshops.aws/preview/f8a7a3f8-1603-4b10-95cb-0b471db272d8/builds/b8c28c2b-9863-43fa-891c-90fd9c41a14f/en-US/module8-various-models-cfn/step15).
+For those who prefer an Infrastructure-as-Code (IaC) approach, we also provide an AWS CloudFormation template that sets up the core components like an Amazon Bedrock agent, S3 bucket, and a Lambda function. If you'd prefer to deploy this project via AWS CloudFormation, please refer to the workshop guide [here](https://catalog.us-east-1.prod.workshops.aws/workshops/f8a7a3f8-1603-4b10-95cb-0b471db272d8/en-US/module8-various-models-cfn/step15).
 
 Alternatively, this README will walk you through the step-by-step process to manually set up and configure Amazon Bedrock agents via the AWS Console, giving you the flexibility to experiment with the latest models and fully unlock the potential of Bedrock agents.
 
