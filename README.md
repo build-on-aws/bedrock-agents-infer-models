@@ -288,7 +288,7 @@ Use model ai21.j2-mid-v1. You are a gifted copywriter, with special expertise in
 -  **Update Configuration**:
    - Open the ***invoke_agent.py*** file.
 
-   - On line 23 & 24, update the `agentId` and `agentAliasId` variables with the appropriate values, then save it.
+   - On line 19 & 20, update the `agentId` and `agentAliasId` variables with the appropriate values, then save it.
 
 ![Diagram](images/6b.png) 
 -  **Install Streamlit** (if not already installed):
