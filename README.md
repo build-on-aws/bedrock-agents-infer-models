@@ -127,7 +127,7 @@ You are a research agent that interacts with various large language models.  You
 
 - Next, we will add an action group. Scroll down to `Action groups` then select ***Add***.
 
-- Call the action group `call-model`. For the Lambda function, we select `bedrock-agent-model-call`.
+- Call the action group `call-model`. For the Lambda function, we select `infer-models-dev-inferModel`.
 
 - For the API Schema, we will choose `Define with in-line OpenAPI schema editor`. Copy & paste the schema from below into the **In-line OpenAPI schema** editor, then select ***Add***:
 ![Diagram](images/4b.png) 
