@@ -70,6 +70,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 ![Diagram](images/2b.png)
 
 - Create a new Serverless project with a Python template. In your terminal, run the following commands:
+
   1.) **cd infer-models**,
   
   2.) **npm install serverless-python-requirements --save-dev** ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
