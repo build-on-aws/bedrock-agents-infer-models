@@ -125,9 +125,11 @@ You are a research agent that interacts with various large language models.  You
 
 - After, make sure you scroll to the top and select the ***Save*** button before moving to the next step.
 
-- Next, we will add an action group. Scroll down to `Action groups` then select ***Add***.
-
-- Call the action group `call-model`. For the Lambda function, we select `infer-models-dev-inferModel`.
+- Next, we will add an action group. Scroll down to `Action groups` then select ***Add***. Call the action group `call-model`.
+  
+- For the Action groupt type, choose **Define with API schemas**
+  
+- The next section, we will select an existing Lambda function **infer-models-dev-inferModel**.
 
 - For the API Schema, we will choose `Define with in-line OpenAPI schema editor`. Copy & paste the schema from below into the **In-line OpenAPI schema** editor, then select ***Add***:
 ![Diagram](images/4b.png) 
