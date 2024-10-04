@@ -73,7 +73,9 @@ The Framework simplifies the process of creating, deploying, and managing server
 
   1.) **cd infer-models**,
   
-  2.) **npm install serverless-python-requirements --save-dev** ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
+  2.) **npm install serverless-python-requirements --save-dev**
+
+  ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
    ![Diagram](images/2d.png)
   
   3.) **npx sls deploy** ***(This will package and deploy the AWS Lambda function)***
