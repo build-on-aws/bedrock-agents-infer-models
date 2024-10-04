@@ -78,8 +78,7 @@ The Framework simplifies the process of creating, deploying, and managing server
   ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
    ![Diagram](images/2d.png)
   
-  3.)
-  ```cmd
+  3.) ```cmd
   npx sls deploy
   ```
 
