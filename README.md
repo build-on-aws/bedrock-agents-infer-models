@@ -283,12 +283,12 @@ Use model meta.llama3-70b-instruct-v1:0. You are a gifted copywriter, with speci
 
     ***macOS/Linux***
      ```linux
-     cd ~/environment/bedrock-agents-infer-models/streamlit_app
+     cd ~/environment/bedrock-agents-infer-models-main/streamlit_app
      ```
 
      ***Windows***
      ```windows
-     cd %USERPROFILE%\environment\bedrock-agents-infer-models\streamlit_app
+     cd %USERPROFILE%\environment\bedrock-agents-infer-models-main\streamlit_app
      ```
 
 -  **Update Configuration**:
