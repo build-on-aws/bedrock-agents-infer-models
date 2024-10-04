@@ -240,6 +240,8 @@ Here is an example of what a url response to access an image should look like:
 
 - Scroll to the bottom and select the `Save and exit` button.
 
+- After, make sure to hit the `Save and exit` button again at the top, then the **Prepare button** at the top of the test agent UI on the right. This will allow us to test the latest changes.
+
 
 ### Step 5: Test various models
 
