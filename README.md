@@ -69,7 +69,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 
 ![Diagram](images/2b.png)
 
-- Create a new Serverless project with a Python template. In your terminal, run: cd infer-models Then run serverless
+- Create a new Serverless project with a Python template. In your terminal, run the commands: **cd infer-models**, then run **serverless**
 ![Diagram](images/2c.png)
 
 - This will start the Serverless Framework's interactive project creation process.. You'll be prompted with several options: Choose "Create new Serverless app". Select the "aws-python3" template and provide "infer-models" as the name for your project.
