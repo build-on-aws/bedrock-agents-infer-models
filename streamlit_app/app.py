@@ -53,7 +53,7 @@ def format_response(response_body):
 # Handling user input and responses
 if submit_button and prompt:
     event = {
-        "sessionId": "MYSESSION115",
+        "sessionId": "MYSESSION",
         "question": prompt
     }
     response = agenthelper.lambda_handler(event, None)
@@ -86,7 +86,7 @@ if submit_button and prompt:
 if end_session_button:
     st.session_state['history'].append({"question": "Session Ended", "answer": "Thank you for using AnyCompany Support Agent!"})
     event = {
-        "sessionId": "MYSESSION115",
+        "sessionId": "MYSESSION",
         "question": "placeholder to end session",
         "endSession": True
     }
@@ -97,8 +97,8 @@ if end_session_button:
 st.write("## Conversation History")
 
 # Load images outside the loop to optimize performance
-human_image = Image.open('./app/streamlit_app/human_face.png')
-robot_image = Image.open('./app/streamlit_app/robot_face.jpg')
+human_image = Image.open('./human_face.png')
+robot_image = Image.open('./robot_face.jpg')
 circular_human_image = crop_to_circle(human_image)
 circular_robot_image = crop_to_circle(robot_image)
 
@@ -157,3 +157,4 @@ model_prompts = [
 st.write("### Model Prompts by Category")
 for category in model_prompts:
     st.table(category['Models'])
+    
