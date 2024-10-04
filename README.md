@@ -245,7 +245,7 @@ Here is an example of what a url response to access an image should look like:
 
 ### Step 5: Test various models
 - ***(Before proceeding, please make sure to enable all models via Amazon Bedrock console that you plan on testing with.)***
-- 
+ 
 - To start testing,  prepare the agent by finding the prepare button on the Agent builder page 
 ![Diagram](images/5a.png) 
 - On the right, you should see an option  to test the agent with a user input field. Below are a few prompts that you can test. However, it is encouraged you become creative and test variations of prompts. 
