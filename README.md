@@ -75,7 +75,7 @@ The Framework simplifies the process of creating, deploying, and managing server
   ```cd infer-models ```
   
   2.)
-  ```cmd npm install serverless-python-requirements --save-dev ```
+  ```npm install serverless-python-requirements --save-dev ```
   
   ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
    ![Diagram](images/2d.png)
