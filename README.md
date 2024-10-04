@@ -280,15 +280,9 @@ Use model meta.llama3-70b-instruct-v1:0. You are a gifted copywriter, with speci
 -  **Navigate to Streamlit_App Folder**:
 
    - Change to the directory containing the Streamlit app:
-
-    ***macOS/Linux***
+   - 
      ```linux
-     cd ~/environment/bedrock-agents-infer-models-main/streamlit_app
-     ```
-
-     ***Windows***
-     ```windows
-     cd %USERPROFILE%\environment\bedrock-agents-infer-models-main\streamlit_app
+     bedrock-agents-infer-models-main/streamlit_app
      ```
 
 -  **Update Configuration**:
