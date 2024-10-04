@@ -103,7 +103,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 
 - To help with inference, we will increase the CPU/memory on the Lambda function. We will also increase the timeout to allow the function enough time to complete the invocation. Select ***General configuration*** on the left, then ***Edit*** on the right.
 
-- Change Memory to ***2048 MB*** and timeout to *1 minute*. Scroll down, and select Save.
+- Change Memory to **2048 MB** and timeout to **1 minute**. Scroll down, and select Save.
 
 ![Diagram](images/3d.png)  
 
