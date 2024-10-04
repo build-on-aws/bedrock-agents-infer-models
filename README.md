@@ -72,15 +72,16 @@ The Framework simplifies the process of creating, deploying, and managing server
 - Create a new Serverless project with a Python template. In your terminal, run the following commands:
 
   1.)
-  ```cmd cd infer-models```,
+  ```cmd cd infer-models ```,
   
   2.)
-  ```cmd npm install serverless-python-requirements --save-dev```
+  ```cmd npm install serverless-python-requirements --save-dev ```
+  
   ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
    ![Diagram](images/2d.png)
   
   3.)
-  ```cmd npx sls deploy```
+  ```cmd npx sls deploy ```
 
   ***(This will package and deploy the AWS Lambda function)***
  ![Diagram](images/3a.png) 
