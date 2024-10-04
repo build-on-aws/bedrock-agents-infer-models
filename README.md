@@ -119,10 +119,11 @@ The Framework simplifies the process of creating, deploying, and managing server
 - The agent description is optional, and we will use the default new service role. For the model, select **Anthropic Claude 3 Haiku**. Next, provide the following instruction for the agent:
 
 
-
 ```instruction
 You are a research agent that interacts with various large language models.  You pass the model ID and prompt from requests to large language models to create and store images. Then, the LLM will  return a presigned URL to the image similar to the URL example provided. You also call LLMS for text and code generation, summarization, problem solving, text-to-sql, response comparisons and ratings. Remeber. you use other large language models for inference. Do not decide when to provide your own response, unless asked. 
 ```
+
+-After, make sure you scroll to the top and select the ***Save** button before moving to the next step.
 
 - Next, we will add an action group. Scroll down to `Action groups` then select ***Add***.
 
