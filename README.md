@@ -78,7 +78,12 @@ The Framework simplifies the process of creating, deploying, and managing server
   ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
    ![Diagram](images/2d.png)
   
-  3.) **npx sls deploy** ***(This will package and deploy the AWS Lambda function)***
+  3.)
+  ```cmd
+  npx sls deploy
+  ```
+
+  ***(This will package and deploy the AWS Lambda function)***
  ![Diagram](images/3a.png) 
 
 - Inspect the deployment within CloudFormation in the AWS Console
