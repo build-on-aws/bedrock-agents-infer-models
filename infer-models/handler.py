@@ -16,7 +16,7 @@ account_id = sts_client.get_caller_identity().get('Account')
 region = boto3.Session().region_name
 
 # Construct the S3 bucket name
-bucket_name = f"bedrock-agent-images-{account_id}-{region}"
+bucket_name = f"{BUCKET NAME HERE}"
 os.environ['S3_IMAGE_BUCKET'] = bucket_name
 object_name = 'the_image.png' 
 
