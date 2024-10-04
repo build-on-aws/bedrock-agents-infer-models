@@ -64,7 +64,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 
 ![Diagram](images/2a.png)
 
-- Open the handler.py document and on line 13 change the s3 bucket name to the one you created earlier 
+- Open the **infer-models/handler.py** document and on line 19 change the s3 bucket name to the one you created earlier 
 - Next step is to install the Serverless Framework globally. Run the command ***npm install -g serverless*** within your terminal. This will install the Serverless Framework on your system, allowing you to use its commands from any directory. If you encounter a node unsupported engine error, refer to the troubleshooting section below.
 
 ![Diagram](images/2b.png)
