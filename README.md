@@ -96,7 +96,6 @@ The Framework simplifies the process of creating, deploying, and managing server
  ![Diagram](images/2d.png)
 
 
-- Navigate to the resources section of the cloud formation template to find the lambda function deployed. 
 - We need to provide the bedrock agent permissions to invoke the lambda function. Open the lambda function and scroll down to select the ***Configuration*** tab. On the left, select *Permissions*. Scroll down to Resource-based policy statements and select Add permissions.
 - Select ***AWS service*** in the middle for your policy statement. Choose ***Other*** for your service, and put ***allow-agent*** for the StatementID. For the Principal, put ***bedrock.amazonaws.com*** .
 - Enter `arn:aws:bedrock:us-west-2:{aws-account-id}:agent/*`. Please note, AWS recommends least privilege so only the allowed agent can invoke this Lambda function. A * at the end of the ARN grants any agent in the account access to invoke this Lambda. Ideally, we would not use this in a production environment. Lastly, for the Action, select *lambda:InvokeFunction*, then Save.
