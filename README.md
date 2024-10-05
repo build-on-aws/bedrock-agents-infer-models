@@ -277,13 +277,10 @@ Use model meta.llama3-70b-instruct-v1:0. You are a gifted copywriter, with speci
 ![Diagram](images/6a.png) 
 - now, navigate back to the IDE you used to open up the project.
      
--  **Navigate to Streamlit_App Folder**:
+-  **Navigate to streamlit_app Directory**:
 
-   - Change to the directory containing the Streamlit app:
-     
-     ```linux
-     bedrock-agents-infer-models-main/streamlit_app
-     ```
+   - Navigate to the directory containing the Streamlit app: ***bedrock-agents-infer-models-main/streamlit_app***
+    
 
 -  **Update Configuration**:
    - Open the ***invoke_agent.py*** file.
