@@ -299,7 +299,7 @@ Use model meta.llama3-70b-instruct-v1:0. You are a gifted copywriter, with speci
      ```
 
 -  **Run the Streamlit App**:
-   - Execute the command:
+   - Execute the following command while in the `streamlit_app` directory:
      ```bash
      streamlit run app.py
      ```
