@@ -1,18 +1,19 @@
 # Inferring Use Case-Specific LLMs through Bedrock Agents
 
 ## Table of Contents
-1. [Introduction](#introduction)
+1. [Overview](#overview)
 2. [Prerequisites](#prerequisites)
 3. [Diagram](#diagram)
 4. [Configuration and Setup](#configuration-and-setup)
    - [Step 1: Creating an Amazon S3 Bucket](#step-1-creating-an-amazon-s3-bucket)
    - [Step 2: Downloading the Project and Creating a Lambda Function Using a Serverless Approach](#step-2-downloading-the-project-and-creating-a-lambda-function-using-a-serverless-approach)
-   - [Step 3: Setting Up the Bedrock Agent and Action Group](#step-3-setting-up-the-bedrock-agent-and-action-group)
+   - [Step 3: Setting Up Bedrock Agent and Action Group](#step-3-setting-up-bedrock-agent-and-action-group)
    - [Step 4: Testing Various Models](#step-4-testing-various-models)
    - [Step 5: Setting Up and Running the Streamlit App Locally](#step-5-setting-up-and-running-the-streamlit-app-locally)
-5. [Conclusion](#conclusion)
-6. [Security](#security)
-7. [License](#license)
+5. [Model IDs Supported](#model-ids-this-project-currently-supports)
+6. [Conclusion](#conclusion)
+7. [Security](#security)
+8. [License](#license)
 
 
 ## Overview
@@ -128,7 +129,7 @@ The Framework simplifies the process of creating, deploying, and managing server
 ![Diagram](images/3e.png) 
 
 
-### Step 4: Setup Bedrock agent and action group 
+### Step 3: Setup Bedrock agent and action group 
 - Navigate to the Bedrock console. Go to the toggle on the left, and under **Builder Tools** select `Agents`. Provide an agent name, like **multi-model-agent** then create the agent.
 ![Diagram](images/4a.png) 
 - The agent description is optional, and we will use the default new service role. For the model, select **Anthropic Claude 3 Haiku**. Next, provide the following instruction for the agent:
@@ -258,7 +259,7 @@ Here is an example of what a url response to access an image should look like:
 - After, make sure to hit the `Save and exit` button again at the top, then the **Prepare button** at the top of the test agent UI on the right. This will allow us to test the latest changes.
 
 
-### Step 5: Test various models
+### Step 4: Test various models
 - ***(Before proceeding, please make sure to enable all models via Amazon Bedrock console that you plan on testing with.)***
  
 - To start testing,  prepare the agent by finding the prepare button on the Agent builder page 
@@ -286,7 +287,7 @@ Use model meta.llama3-70b-instruct-v1:0. You are a gifted copywriter, with speci
 
 ***(If you would like to have a UI setup with this project, continue to step 6)***
 
-## Step 6: Setting up and running the Streamlit app Locally
+## Step 5: Setting up and running the Streamlit app Locally
 
 - You will need to have an `agent alias ID`, along with the `agent ID` for this step. Go to the Bedrock management console, then select your multi-model agent. Copy the `Agent ID` from the top-right of the `Agent overview` section. Then, scroll down to **Aliases** and select ***Create***. Name the alias `a1`, then create the agent. Save the `Alias ID` generated.
 ![Diagram](images/6a.png) 
