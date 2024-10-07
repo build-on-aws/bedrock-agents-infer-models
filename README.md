@@ -10,10 +10,9 @@
    - [Step 3: Setting Up the Bedrock Agent and Action Group](#step-3-setting-up-the-bedrock-agent-and-action-group)
    - [Step 4: Testing Various Models](#step-4-testing-various-models)
    - [Step 5: Setting Up and Running the Streamlit App Locally](#step-5-setting-up-and-running-the-streamlit-app-locally)
-5. [Model IDs Supported](#model-ids-supported)
-6. [Conclusion](#conclusion)
-7. [Security](#security)
-8. [License](#license)
+5. [Conclusion](#conclusion)
+6. [Security](#security)
+7. [License](#license)
 
 
 ## Overview
