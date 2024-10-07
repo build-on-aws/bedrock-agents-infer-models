@@ -1,6 +1,22 @@
 # Inferring Use Case-Specific LLMs through Bedrock Agents
 
-## Introduction
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Prerequisites](#prerequisites)
+3. [Diagram](#diagram)
+4. [Configuration and Setup](#configuration-and-setup)
+   - [Step 1: Creating an Amazon S3 Bucket](#step-1-creating-an-amazon-s3-bucket)
+   - [Step 2: Downloading the Project and Creating a Lambda Function Using a Serverless Approach](#step-2-downloading-the-project-and-creating-a-lambda-function-using-a-serverless-approach)
+   - [Step 3: Setting Up the Bedrock Agent and Action Group](#step-3-setting-up-the-bedrock-agent-and-action-group)
+   - [Step 4: Testing Various Models](#step-4-testing-various-models)
+   - [Step 5: Setting Up and Running the Streamlit App Locally](#step-5-setting-up-and-running-the-streamlit-app-locally)
+5. [Model IDs Supported](#model-ids-supported)
+6. [Conclusion](#conclusion)
+7. [Security](#security)
+8. [License](#license)
+
+
+## Overview
 This project serves as a baseline for developers to extend their use cases across various large language models (LLMs) using Amazon Bedrock agents. The goal is to showcase the potential of leveraging multiple models on Bedrock to create chained responses that adapt to diverse scenarios. In addition to generating text-based outputs, this app also supports creating and examining images using image generation and text-to-image models. This expanded functionality enhances the versatility of the application, making it suitable for more creative and visual use cases.
 
 For those who prefer an Infrastructure-as-Code (IaC) approach, we also provide an AWS CloudFormation template that sets up the core components like an Amazon Bedrock agent, S3 bucket, and a Lambda function. If you'd prefer to deploy this project via AWS CloudFormation, please refer to the workshop guide [here](https://catalog.us-east-1.prod.workshops.aws/workshops/f8a7a3f8-1603-4b10-95cb-0b471db272d8/en-US/module8-various-models-cfn/step15).
