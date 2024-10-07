@@ -1,7 +1,7 @@
 # Inferring Use Case-Specific LLMs through Bedrock Agents
 
 ## Introduction
-This project serves as a baseline for developers to extend their use cases across various large language models (LLMs) using Amazon Bedrock agents. The goal is to showcase the potential of leveraging multiple models on Bedrock to create chained responses that adapt to diverse scenarios. 
+This project serves as a baseline for developers to extend their use cases across various large language models (LLMs) using Amazon Bedrock agents. The goal is to showcase the potential of leveraging multiple models on Bedrock to create chained responses that adapt to diverse scenarios. In addition to generating text-based outputs, this app also supports creating and examining images using image generation and text-to-image models. This expanded functionality enhances the versatility of the application, making it suitable for more creative and visual use cases.
 
 For those who prefer an Infrastructure-as-Code (IaC) approach, we also provide an AWS CloudFormation template that sets up the core components like an Amazon Bedrock agent, S3 bucket, and a Lambda function. If you'd prefer to deploy this project via AWS CloudFormation, please refer to the workshop guide [here](https://catalog.us-east-1.prod.workshops.aws/workshops/f8a7a3f8-1603-4b10-95cb-0b471db272d8/en-US/module8-various-models-cfn/step15).
 
