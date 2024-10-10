@@ -21,3 +21,4 @@ plugins:
 custom:
   pythonRequirements:
     dockerizePip: true
+    platform: linux/amd64
