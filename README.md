@@ -97,7 +97,9 @@ The Framework simplifies the process of creating, deploying, and managing server
    ![Diagram](images/2d.png)
   
   3.)
-  **(BEFORE RUNNING THE NEXT COMMAND, DOCKER ENGINE WILL NEED TO BE INSTALLED AND RUNNING. MORE INFORMATION CAN BE FOUND [HERE](https://docs.docker.com/engine/install/) )**
+
+  ***(BEFORE RUNNING THE NEXT COMMAND, DOCKER ENGINE WILL NEED TO BE INSTALLED AND RUNNING. MORE INFORMATION CAN BE FOUND [HERE](https://docs.docker.com/engine/install/) )***
+
   ```npx sls deploy ```
   
 
