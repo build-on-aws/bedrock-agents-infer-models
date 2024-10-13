@@ -293,7 +293,7 @@ Use model meta.llama3-70b-instruct-v1:0. You are a gifted copywriter, with speci
 
 ## Step 5: Setting up and running the Streamlit app Locally
 
-- You will need to have an `agent alias ID`, along with the `agent ID` for this step. Go to the Bedrock management console, then select your multi-model agent. Copy the `Agent ID` from the top-right of the `Agent overview` section. Then, scroll down to **Aliases** and select ***Create***. Name the alias `a1`, then create the agent. Save the `Alias ID` generated.
+- You will need to have an `agent alias ID`, along with the `agent ID` for this step. Go to the Bedrock management console, then select your multi-model agent. Copy the `Agent ID` from the top-right of the `Agent overview` section. Then, scroll down to **Aliases** and select ***Create***. Name the alias `a1`, then create the agent. Save the ***Alias ID*** generated, **NOT** the alias name.
 ![Diagram](images/6a.png) 
 - now, navigate back to the IDE you used to open up the project.
      
