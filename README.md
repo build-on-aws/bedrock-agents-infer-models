@@ -85,15 +85,18 @@ The Framework simplifies the process of creating, deploying, and managing server
 
 ![Diagram](images/2b.png)
 
-- Create a new Serverless project with a Python template. In your terminal, run the following commands:
+- Create a new Serverless project with a Python template. In your terminal, run: cd infer-models Then run serverless
+![Diagram](images/2c.png)
 
-  1.)
-  ```cd infer-models ```
+- This will start the Serverless Framework's interactive project creation process.. You'll be prompted with several options: Choose "Create new Serverless app". Select the "aws-python3" template and provide "infer-models" as the name for your project.
+- This will create a new directory called ***infer-models*** with a basic Serverless project structure and a Python template.
+- You may also be prompted to login/register. select the "Login/Register" option. This will open a browser window where you can create a new account or log in if you already have one. After logging in or creating an account, choose the "Framework Open Source" option, which is free to use.
+- If your stack fails to deploy, please comment out line 2 of the **serverless.yml file** 
+- After executing the serverless command and following the prompts, a new directory with the project name (e.g., infer-models) will be created, containing the boilerplate structure and configuration files for the Serverless project.
+- Now we will Install the serverless-python-requirements Plugin: The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project. Install it by running: 
+
+  ***npm install serverless-python-requirements —save-dev*** 
   
-  2.)
-  ```npm install serverless-python-requirements --save-dev ```
-  
-  ***(The serverless-python-requirements plugin helps manage Python dependencies for your Serverless project)***
    ![Diagram](images/2d.png)
   
   3.)
